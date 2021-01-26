@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>ChatApp</title>
+    <link
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+            crossorigin="anonymous">
+    <link
+            href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
+            rel="stylesheet" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/chatapp.css">
+</head>
+<style>
+</style>
+<body>
+
+<div class="chatapp-container">
+<!--    <div class="toppane">-->
+<!--        <form method="get" th:action="@{/logout}">-->
+<!--            &lt;!&ndash;input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/&ndash;&gt;-->
+<!--            <span class="username">[[${#httpServletRequest.remoteUser}]]</span>-->
+<!--            <button class="btn btn-sm btn-primary float-r" type="submit">Logout</button>-->
+<!--        </form>-->
+<!--    </div>-->
+
+    <div class="leftpane">
+        <div id="online-users-title">Users</div>
+        <div id="online-users">
+            <ul id="online-users-list"
+                th:each="user: ${onlineusers}" th:object="${user}">
+
+                <li id="online-user"
+                    th:text="${user.username}"
+                ></li>
+
+            </ul>
+        </div>
+        <div id="offline-users">
+            <ul id="offline-users-list" th:each="user: ${offlineusers}">
+                <li id="offline-user" th:text="${user.username}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="middlepane">
+        <div id="messages">
+            Messages go here...
+        </div>
+        <div id="message-send">
+            <div id="message">
+                <textarea name="message" placeholder="Message..."></textarea>
+            </div>
+            <div id="send">
+                <button id="send-button" type="submit" name="send" autofocus>Send</button>
+            </div>
+        </div>
+
+    </div>
+
+<!--    <div class="rightpane">-->
+<!--        <div id="offline-users-title">Offline Users</div>-->
+<!--    </div>-->
+</div>
+</body>
+</html>
