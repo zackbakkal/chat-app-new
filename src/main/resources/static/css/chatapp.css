@@ -56,6 +56,7 @@ body {
     border-collapse: collapse;
   	margin: 1px;
   	padding: 2px;
+  	overflow-y: scroll;
 }
 
 .rightpane {
@@ -119,12 +120,14 @@ body {
     padding: 2px;
     border: 8px ridge #1C6EA4;
     border-radius: 5px;
+    color: black;
+    overflow-y: scroll;
 }
 
 #message-send {
     position: absolute;
     bottom: 5px;
-    width: 100%;
+    width: 95%;
     height: 15%;
     border: 8px ridge #1C6EA4;
     border-radius: 5px;
@@ -168,6 +171,34 @@ body {
 
 #online-user:hover, #offline-user:hover {
     cursor: pointer;
+}
+
+#conversation-message {
+    background-color: grey;
+}
+
+.user {
+    background-color: #3e3e3e;
+    color: white;
+    width: 100%;
+    marhin-bottom: 1px;
+}
+
+.user :: before {
+    content: "\2022";
+    color: red;
+}
+
+.user:focus {
+    color: blue !important;
+}
+
+.online {
+    color: green;
+}
+
+.offline {
+   color: lightgrey;
 }
 
 ul {

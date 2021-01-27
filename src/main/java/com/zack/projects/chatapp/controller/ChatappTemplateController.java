@@ -1,53 +1,56 @@
 package com.zack.projects.chatapp.controller;
 
+import com.zack.projects.chatapp.entity.Message;
 import com.zack.projects.chatapp.entity.User;
 import com.zack.projects.chatapp.entity.UserConversation;
 import com.zack.projects.chatapp.repository.UserRepository;
+import com.zack.projects.chatapp.service.ChatappTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/chatapp")
 public class ChatappTemplateController {
 
     @Autowired
-    private UserRepository userRepository;
+    private ChatappTemplateService chatappTemplateService;
 
-    @GetMapping("chatapp")
+    private List<Message> messages;
+
+    @GetMapping("/")
     public String getChatapp(Model model) {
 
-        List<User> offlineUsers = userRepository
-                .findAll()
-                .stream()
-                .filter(user ->
-                        !user.isOnline())
-                .collect(Collectors.toList());
-
-        List<User> onlineUsers = userRepository
-                .findAll()
-                .stream()
-                .filter(user ->
-                        user.isOnline())
-                .collect(Collectors.toList());
-
-        System.out.println(offlineUsers);
+        List<User> offlineUsers = chatappTemplateService.getOfflineUsers();
+        List<User> onlineUsers = chatappTemplateService.getOnlineUsers();
 
         model.addAttribute("offlineusers", offlineUsers);
         model.addAttribute("onlineusers", onlineUsers);
+        model.addAttribute("conversation", messages);
 
         return "chatapp";
     }
 
-    @GetMapping
-    public void getConversation(Model model) {
-        System.out.println(model.getAttribute("username"));
+    @GetMapping("conversations/{username}")
+    public String getConversation(
+            @PathVariable String username,
+            Model model,
+            final RedirectAttributes redirectAttributes) {
+
+        System.out.println(username);
+
+        String owner = "zack";
+//                httpServletRequest.getRemoteUser();
+        messages = chatappTemplateService.getConversation(owner, username);
+        System.out.println(messages);
+        redirectAttributes.addAttribute("conversation", messages);
+
+        return getChatapp(model);
     }
 }
