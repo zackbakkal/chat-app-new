@@ -61,12 +61,18 @@ public class ChatappTemplateController {
     }
 
     @PostMapping("sendMessage")
-    public String sendMessage(@ModelAttribute("text") String text, Model model) throws UserNameNotFoundException {
+    public String sendMessage(
+            @ModelAttribute("text") String text,
+            Model model) throws UserNameNotFoundException {
 
         Message message = new Message();
         message.setSenderRecipient(new SenderRecipient(owner, currentRecipient));
         message.setText(text);
         messageService.sendMessage(message);
+        messages = chatappTemplateService.getConversation(owner, currentRecipient);
+
+        System.out.println(messages);
+
         return getChatapp(model);
     }
 

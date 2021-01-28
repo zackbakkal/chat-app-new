@@ -55,6 +55,9 @@
             <ul th:each="message : ${conversation}" id="messages-list">
                 <li th:utext="${message.text}"></li>
             </ul>
+            <ul th:if="${lastMessageSent != null}">
+                <li th:utext="${lastMessageSent}"></li>
+            </ul>
         </div>
 
         <div id="message-send">
