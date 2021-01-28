@@ -1,8 +1,11 @@
 package com.zack.projects.chatapp.controller;
 
 import com.zack.projects.chatapp.entity.Message;
+import com.zack.projects.chatapp.entity.SenderRecipient;
 import com.zack.projects.chatapp.entity.User;
+import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import com.zack.projects.chatapp.service.ChatappTemplateService;
+import com.zack.projects.chatapp.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +21,13 @@ public class ChatappTemplateController {
     @Autowired
     private ChatappTemplateService chatappTemplateService;
 
+    @Autowired
+    private MessageService messageService;
+
     private List<Message> messages;
+
+    private String currentRecipient;
+    private String owner;
 
     @GetMapping("/")
     public String getChatapp(Model model) {
@@ -29,6 +38,7 @@ public class ChatappTemplateController {
         model.addAttribute("offlineusers", offlineUsers);
         model.addAttribute("onlineusers", onlineUsers);
         model.addAttribute("conversation", messages);
+        model.addAttribute("text", new String());
 
         return "chatapp";
     }
@@ -39,9 +49,9 @@ public class ChatappTemplateController {
             Model model,
             final RedirectAttributes redirectAttributes) {
 
-        System.out.println(username);
+        currentRecipient = username;
 
-        String owner = "zack";
+        owner = "zack";
 //                httpServletRequest.getRemoteUser();
         messages = chatappTemplateService.getConversation(owner, username);
         System.out.println(messages);
@@ -49,4 +59,15 @@ public class ChatappTemplateController {
 
         return getChatapp(model);
     }
+
+    @PostMapping("sendMessage")
+    public String sendMessage(@ModelAttribute("text") String text, Model model) throws UserNameNotFoundException {
+
+        Message message = new Message();
+        message.setSenderRecipient(new SenderRecipient(owner, currentRecipient));
+        message.setText(text);
+        messageService.sendMessage(message);
+        return getChatapp(model);
+    }
+
 }

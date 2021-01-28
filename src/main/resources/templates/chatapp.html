@@ -34,48 +34,44 @@
         <div id="online-users-title">Users</div>
         <div id="online-users">
             <form th:action="@{/chatapp/conversations/{username}(username=${user.username})}"
+                  method="GET"
                   th:each="user: ${onlineusers}">
                 <button type="submit" th:text="${user.username}" class="user online"></button>
             </form>
-<!--            <ul id="online-users-list"-->
-<!--                th:each="user: ${onlineusers}" th:object="${user}">-->
-<!--                <li id="online-user" th:text="${user.username}">-->
-<!--                </li>-->
 
-<!--            </ul>-->
         </div>
+
         <div id="offline-users">
             <form th:action="@{/chatapp/conversations/{username}(username=${user.username})}"
                   th:each="user: ${offlineusers}">
                 <button type="submit" th:text="${user.username}" class="user offline"></button>
             </form>
-<!--            <ul id="offline-users-list" th:each="user: ${offlineusers}">-->
-<!--                <li id="offline-user" th:text="${user.username}"></li>-->
-<!--            </ul>-->
+
         </div>
     </div>
 
     <div class="middlepane">
         <div id="messages">
-            <ul th:each="message : ${conversation}">
+            <ul th:each="message : ${conversation}" id="messages-list">
                 <li th:utext="${message.text}"></li>
             </ul>
-<!--            <div th:utext="${message.text}"></div>-->
         </div>
+
         <div id="message-send">
-            <div id="message">
-                <textarea name="message" placeholder="Message..."></textarea>
+            <form id="send-message-form" method="POST"
+                  th:action="@{/chatapp/sendMessage}"></form>
+            <div id="message" name="message">
+                <textarea placeholder="Message..." id="sentmessage"
+                          th:object="${text}" name="text" form="send-message-form" autofocus></textarea>
             </div>
             <div id="send">
-                <button id="send-button" type="submit" name="send" autofocus>Send</button>
+                <button id="send-button" type="submit" name="send" form="send-message-form"
+                        >Send</button>
             </div>
         </div>
 
     </div>
 
-<!--    <div class="rightpane">-->
-<!--        <div id="offline-users-title">Offline Users</div>-->
-<!--    </div>-->
 </div>
 </body>
 </html>
