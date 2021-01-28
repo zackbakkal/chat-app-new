@@ -1,8 +1,6 @@
 package com.zack.projects.chatapp.entity;
 
-import com.zack.projects.chatapp.repository.ConversationRepository;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
