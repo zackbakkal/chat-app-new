@@ -34,6 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private final PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
 	public SecurityConfig(ApplicationUserService applicationUserService, PasswordEncoder passwordEncoder) {
 		super();
 		this.applicationUserService = applicationUserService;
@@ -65,11 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.logout()
 				.logoutUrl("/logout")
+				.logoutSuccessHandler(customLogoutSuccessHandler)
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
 				.clearAuthentication(true)
 				.invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID", "remember-me")
-				.logoutSuccessUrl("/login")
 			;
 	}
 	

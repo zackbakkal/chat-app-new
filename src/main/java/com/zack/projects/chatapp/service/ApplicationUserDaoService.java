@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.zack.projects.chatapp.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,7 @@ import com.zack.projects.chatapp.repository.UserRepository;
 import static com.zack.projects.chatapp.security.UserRole.*;
 
 @Repository("fake")
+@Slf4j
 public class ApplicationUserDaoService implements ApplicationUserDao {
 
 	@Autowired
@@ -35,14 +37,19 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 
 	@Override
 	public Optional<ApplicationUser> selectChatappApplicationUserByUserName(String username) {
-		
+
+		log.info(String.format("Find the user with username [%s]", username));
 		Optional<ApplicationUser> applicationUser = getApplicationUsers().stream()
 				.filter(appUser -> username.equals(appUser.getUsername()))
 				.findFirst();
-		
+
+		log.info(String.format("Check if the user with username [%s] exists.", username));
 		if(applicationUser.isPresent()) {
+			log.info("Retrieve the user object");
 			User user = this.userRepository.findById(applicationUser.get().getUsername()).get();
+			log.info("Set the user status to online");
 			this.userService.setUserOnline(user);
+			log.info("Save the user object");
 			this.userRepository.save(user);
 		}
 		
@@ -52,7 +59,8 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 	private List<ApplicationUser> getApplicationUsers() {
 		
 		List<ApplicationUser> applicationUsers = Lists.newArrayList();
-		
+
+		log.info("Retrieve the list of existing users.");
 		userRepository.findAll()
 					.stream()
 					.forEach(user 

@@ -6,9 +6,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConversationId implements Serializable {

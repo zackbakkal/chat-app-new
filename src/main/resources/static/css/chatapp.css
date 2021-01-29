@@ -5,9 +5,11 @@
 }
 
 body, html {
+  position: relative;
   width: 100%;
   height: 100%;
   margin: 0;
+  height: 100vh;
 }
 
 body {
@@ -30,16 +32,19 @@ body {
   background-color: #3e3e3e;
   margin: 1px;
   padding: 2px;
+  background-color: black;
 }
 
-.toppane .username {
+#username {
 	padding: 2px;
 	font-weight: bold;
+	margin-left: 10px;
+    font-size: 1.5em;
 }
 
 .leftpane {
     width: 15%;
-    height: 100%;
+    height: 90%;
     float: left;
     background-color: #3e3e3e;
     border-collapse: collapse;
@@ -48,28 +53,14 @@ body {
 }
 
 .middlepane {
-    position: relative;
+    /*position: relative;*/
     width: 80%;
-    height: 100%;
+    height: 90%;
     float: left;
     background-color: #3e3e3e;
     border-collapse: collapse;
-  	margin: 1px;
-  	padding: 2px;
-  	overflow-y: scroll;
-}
-
-.rightpane {
-  width: 20%;
-  right: 0;
-  height: 100%;
-  position: relative;
-  float: right;
-  background-color: #3e3e3e;
-  border-collapse: collapse;
-  margin: 1px;
-  padding: 2px;
-  height: 100vh;
+  	margin-left: 1px;
+  	padding: 0;
 }
 
 #online-users-title {
@@ -122,23 +113,25 @@ body {
     border-radius: 5px;
     color: black;
     overflow-y: scroll;
+    margin-bottom: 0;
 }
 
 #message-send {
-    position: absolute;
-    bottom: 5px;
-    width: 95%;
-    height: 15%;
+    /*position: absolute;*/
+    margin: 0;
+    width: 100%;
+    height: 20%;
     border: 8px ridge #1C6EA4;
     border-radius: 5px;
 }
 
 #message {
-    position: absolute;
+    /*position: absolute;*/
     width: 80%;
     height: 100%;
-    display: inline-block;
     margin: 1px;
+    float: left;
+    display: inline;
 }
 
 #message textarea {
@@ -152,21 +145,17 @@ body {
 }
 
 #send {
-    position: absolute;
-    width: 15%;
+    width: 22%;
     height: 100%;
-    left: 82%;
-    display: inline;
+    margin-left: 80%;
 }
 
 #send #send-button {
     margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    width: 100%;
+    /*position: absolute;*/
+    width: 90%;
     height: 100%;
+    right: 0
 }
 
 #online-user:hover, #offline-user:hover {

@@ -7,9 +7,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "messages")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message {
@@ -22,6 +20,7 @@ public class Message {
     private String text;
     private Timestamp dateSent;
 
+    @ToString.Exclude
     @MapsId("conversationId")
     @JoinColumns({
             @JoinColumn(name = "sender", referencedColumnName = "sender"),

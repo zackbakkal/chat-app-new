@@ -8,9 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
