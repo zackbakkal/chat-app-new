@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -24,12 +25,15 @@ public class ChatappTemplateController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private UserController userController;
+
     private List<Message> messages;
 
     private String currentRecipient;
     private String owner;
 
-    @GetMapping("/")
+    @GetMapping
     public String getChatapp(Model model) {
 
         List<User> offlineUsers = chatappTemplateService.getOfflineUsers();
@@ -47,14 +51,14 @@ public class ChatappTemplateController {
     public String getConversation(
             @PathVariable String username,
             Model model,
-            final RedirectAttributes redirectAttributes) {
+            final RedirectAttributes redirectAttributes,
+            HttpServletRequest httpServletRequest) throws UserNameNotFoundException {
 
         currentRecipient = username;
 
-        owner = "zack";
-//                httpServletRequest.getRemoteUser();
+        owner = httpServletRequest.getRemoteUser();
         messages = chatappTemplateService.getConversation(owner, username);
-        System.out.println(messages);
+
         redirectAttributes.addAttribute("conversation", messages);
 
         return getChatapp(model);
@@ -63,7 +67,8 @@ public class ChatappTemplateController {
     @PostMapping("sendMessage")
     public String sendMessage(
             @ModelAttribute("text") String text,
-            Model model) throws UserNameNotFoundException {
+            Model model,
+            HttpServletRequest httpServletRequest) throws UserNameNotFoundException {
 
         Message message = new Message();
         message.setSenderRecipient(new SenderRecipient(owner, currentRecipient));

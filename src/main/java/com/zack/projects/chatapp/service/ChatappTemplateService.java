@@ -54,9 +54,6 @@ public class ChatappTemplateService {
                 .findFirst()
                 .get();
 
-        System.out.println(ownerUser.getUsername());
-
-
         ConversationId conversationId = new ConversationId(owner, recipient);
 
         Optional<UserConversation> optionalOwnerRecipientConversation = conversationRepository.findById(conversationId);

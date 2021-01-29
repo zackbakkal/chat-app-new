@@ -23,13 +23,13 @@
 <body>
 
 <div class="chatapp-container">
-<!--    <div class="toppane">-->
-<!--        <form method="get" th:action="@{/logout}">-->
-<!--            &lt;!&ndash;input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/&ndash;&gt;-->
-<!--            <span class="username">[[${#httpServletRequest.remoteUser}]]</span>-->
-<!--            <button class="btn btn-sm btn-primary float-r" type="submit">Logout</button>-->
-<!--        </form>-->
-<!--    </div>-->
+    <div class="toppane">
+        <form method="get" th:action="@{/logout}">
+            <!--input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/-->
+            <span class="username">[[${#httpServletRequest.remoteUser}]]</span>
+            <button class="btn btn-sm btn-primary float-r" type="submit">Logout</button>
+        </form>
+    </div>
 
     <div class="leftpane">
         <div id="online-users-title">Users</div>

@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class ChatappUserService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -81,6 +81,11 @@ public class ChatappUserService {
         return userOnlineStatusResponseTemplate;
     }
 
+    // Set user online
+    public void setUserOnline(User user) {
+        user.setOnline(true);;
+    }
+
     public UserOnlineStatusResponseTemplate setUserOffline(String username) throws UserNameNotFoundException {
 
         User user = findUserByUsername(username);
@@ -96,6 +101,11 @@ public class ChatappUserService {
         userRepository.save(user);
 
         return userOnlineStatusResponseTemplate;
+    }
+
+    // Set user offline
+    public void setUserOffline(User user) {
+        user.setOnline(false);;
     }
 
     public UserOnlineStatusResponseTemplate getUserStatus(String username) throws UserNameNotFoundException {
