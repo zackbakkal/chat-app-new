@@ -108,4 +108,6 @@ $(document).ready(function () {
         });
     }
 
+    // TODO: refresh messages when new ones are available
+
 });
