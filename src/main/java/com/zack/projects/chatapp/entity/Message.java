@@ -1,8 +1,6 @@
 package com.zack.projects.chatapp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -22,6 +20,7 @@ public class Message {
     private String text;
     private Timestamp dateSent;
 
+    @ToString.Exclude
     @MapsId("conversationId")
     @JoinColumns({
             @JoinColumn(name = "sender", referencedColumnName = "sender"),

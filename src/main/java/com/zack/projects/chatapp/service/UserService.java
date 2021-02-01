@@ -12,10 +12,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class ChatappUserService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -81,6 +82,11 @@ public class ChatappUserService {
         return userOnlineStatusResponseTemplate;
     }
 
+    // Set user online
+    public void setUserOnline(User user) {
+        user.setOnline(true);;
+    }
+
     public UserOnlineStatusResponseTemplate setUserOffline(String username) throws UserNameNotFoundException {
 
         User user = findUserByUsername(username);
@@ -96,6 +102,11 @@ public class ChatappUserService {
         userRepository.save(user);
 
         return userOnlineStatusResponseTemplate;
+    }
+
+    // Set user offline
+    public void setUserOffline(User user) {
+        user.setOnline(false);;
     }
 
     public UserOnlineStatusResponseTemplate getUserStatus(String username) throws UserNameNotFoundException {
@@ -125,6 +136,39 @@ public class ChatappUserService {
                     return new UserNameNotFoundException(String.format("Username [%s] not found", username));
                 });
 
+    }
+
+    public List<UserOnlineStatusResponseTemplate> getOnlineUsers() {
+
+        List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
+
+        userRepository
+                .findAll()
+                .stream()
+                .filter(user ->
+                        user.isOnline())
+                .collect(Collectors.toList())
+                .forEach(user ->
+                        userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
+
+        return userOnlineStatusResponseTemplates;
+
+    }
+
+    public List<UserOnlineStatusResponseTemplate> getOfflineUsers() {
+
+        List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
+
+        userRepository
+                .findAll()
+                .stream()
+                .filter(user ->
+                        !user.isOnline())
+                .collect(Collectors.toList())
+                .forEach(user ->
+                        userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
+
+        return userOnlineStatusResponseTemplates;
     }
 
 }

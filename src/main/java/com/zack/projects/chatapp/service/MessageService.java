@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -63,17 +65,17 @@ public class MessageService {
 
         log.info(String.format("Conversation between [%s] and [%s] does not exist",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
-        UserConversation conversation = new UserConversation();
+        UserConversation userConversation = new UserConversation();
 
         log.info(String.format("Creating a conversation between [%s] and [%s] with conversation id [%s]",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient(), conversationId));
-        conversation.setConversationId(conversationId);
+        userConversation.setConversationId(conversationId);
 
         log.info(String.format("Add message to the conversation"));
-        conversation.getMessages().add(message);
+        userConversation.getMessages().add(message);
 
         log.info(String.format("Add conversation to the user"));
-        user.getConversations().add(conversation);
+        user.getUserConversations().add(userConversation);
 
         log.info(String.format("Save the user"));
         userRepository.save(user);
@@ -82,5 +84,16 @@ public class MessageService {
 
     }
 
+    public List<Message> getMessages(String owner, String recipient) {
 
+        return messageRepository.findAll()
+                .stream()
+                .filter(message ->
+                        message.getSenderRecipient().getSender().equals(owner)
+                                && message.getSenderRecipient().getRecipient().equals(recipient) ||
+                                message.getSenderRecipient().getSender().equals(recipient)
+                                        && message.getSenderRecipient().getRecipient().equals(owner))
+                .collect(Collectors.toList());
+
+    }
 }

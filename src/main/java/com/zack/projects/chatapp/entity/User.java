@@ -1,8 +1,6 @@
 package com.zack.projects.chatapp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,6 +28,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "conversations", referencedColumnName = "username")
-    private List<UserConversation> conversations = new ArrayList<>();
+    private List<UserConversation> userConversations = new ArrayList<>();
 
 }

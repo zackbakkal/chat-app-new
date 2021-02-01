@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>User Account Deactivated</title>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+	crossorigin="anonymous">
+<link
+	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
+	rel="stylesheet" crossorigin="anonymous" />
+</head>
+<style>
+body {
+	background-color: #3e3e3e;
+	color: white;
+}
+</style>
+
+<body>
+
+	<h2>Unable to login, User Account Deactivated.</h2>
+
+	<div th:if="${user != null}">
+		<ul>
+			<li>User Name: <span th:utext="${user.userName}">..</span></li>
+			<li>Email: <span th:utext="${user.userEmail}">..</span></li>
+		</ul>
+	</div>
+
+	<form class="form-signin" method="GET" action="/login">
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Done</button>
+	</form>
+
+</body>
+</html>
