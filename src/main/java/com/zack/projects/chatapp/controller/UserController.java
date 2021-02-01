@@ -60,4 +60,14 @@ public class UserController {
         return userService.setUserOffline(username);
     }
 
+    @GetMapping("/online")
+    public List<UserOnlineStatusResponseTemplate> getOnlineUsers() {
+        return userService.getOnlineUsers();
+    }
+
+    @GetMapping("/offline")
+    public List<UserOnlineStatusResponseTemplate> getOfflineUsers() {
+        return userService.getOfflineUsers();
+    }
+
 }

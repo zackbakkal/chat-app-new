@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -135,6 +136,39 @@ public class UserService {
                     return new UserNameNotFoundException(String.format("Username [%s] not found", username));
                 });
 
+    }
+
+    public List<UserOnlineStatusResponseTemplate> getOnlineUsers() {
+
+        List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
+
+        userRepository
+                .findAll()
+                .stream()
+                .filter(user ->
+                        user.isOnline())
+                .collect(Collectors.toList())
+                .forEach(user ->
+                        userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
+
+        return userOnlineStatusResponseTemplates;
+
+    }
+
+    public List<UserOnlineStatusResponseTemplate> getOfflineUsers() {
+
+        List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
+
+        userRepository
+                .findAll()
+                .stream()
+                .filter(user ->
+                        !user.isOnline())
+                .collect(Collectors.toList())
+                .forEach(user ->
+                        userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
+
+        return userOnlineStatusResponseTemplates;
     }
 
 }

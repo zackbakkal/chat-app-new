@@ -3,6 +3,7 @@ package com.zack.projects.chatapp.controller;
 import com.zack.projects.chatapp.entity.User;
 import com.zack.projects.chatapp.exception.UserNameExistsException;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/")
+@Slf4j
 public class ChatappLoginController {
 
     @Autowired
@@ -58,7 +60,7 @@ public class ChatappLoginController {
     @PutMapping("logout")
     public String logout(HttpServletRequest httpServletRequest) throws UserNameNotFoundException {
 
-        System.out.println("loging out: " + httpServletRequest.getRemoteUser());
+        log.info(String.format("loging out: " + httpServletRequest.getRemoteUser()));
         userController.setUserOffline(httpServletRequest.getRemoteUser());
 
         return "login";

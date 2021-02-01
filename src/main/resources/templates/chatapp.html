@@ -16,7 +16,8 @@
             href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
             rel="stylesheet" crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/chatapp.css">
-    <script src="/js/conversationscrolldown.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.12.1.min.js"></script>
+    <script src="/js/requests.js"></script>
 </head>
 <style>
 </style>
@@ -32,44 +33,24 @@
 
     <div class="leftpane">
         <div id="online-users-title">Users</div>
-        <div id="online-users">
-            <form th:action="@{/chatapp/conversations/{username}(username=${user.username})}"
-                  method="GET"
-                  th:each="user: ${onlineusers}">
-                <button type="submit" th:text="${user.username}" class="user online"></button>
-            </form>
-
+        <div id="users-list">
+            <div id="online-users"></div>
+            <div id="offline-users"></div>
         </div>
 
-        <div id="offline-users">
-            <form th:action="@{/chatapp/conversations/{username}(username=${user.username})}"
-                  th:each="user: ${offlineusers}">
-                <button type="submit" th:text="${user.username}" class="user offline"></button>
-            </form>
-
-        </div>
     </div>
 
     <div class="middlepane">
         <div id="messages">
-            <ul th:each="message : ${conversation}" id="messages-list">
-                <li th:utext="${message.text}"></li>
-            </ul>
-            <ul th:if="${lastMessageSent != null}">
-                <li th:utext="${lastMessageSent}"></li>
-            </ul>
+            <ul id="messages-list"></ul>
         </div>
 
         <div id="message-send">
-            <form id="send-message-form" method="POST"
-                  th:action="@{/chatapp/sendMessage}"></form>
-            <div id="message" name="message">
-                <textarea placeholder="Message..." id="sentmessage"
-                          th:object="${text}" name="text" form="send-message-form" autofocus></textarea>
+            <div id="message" >
+                <textarea placeholder="Message..." id="sentmessage" name="text" autofocus></textarea>
             </div>
             <div id="send">
-                <button id="send-button" type="submit" name="send" form="send-message-form"
-                        >Send</button>
+                <button id="send-button" type="submit" name="send" >Send</button>
             </div>
         </div>
 
