@@ -106,20 +106,20 @@ body {
 
 #messages {
     height: 80%;
-    background-color: #EFEFEF;
-    padding: 2px;
-    border: 8px ridge #1C6EA4;
+    background-color: #1F201B;
+    border: 8px ridge #007BFF;
     border-radius: 5px;
     color: black;
     overflow-y: scroll;
     margin-bottom: 0;
+    padding: 10px;
 }
 
 #message-send {
     margin: 0;
     width: 100%;
     height: 20%;
-    border: 8px ridge #1C6EA4;
+    border: 8px ridge #007BFF;
     border-radius: 5px;
 }
 
@@ -133,6 +133,16 @@ body {
 
 #message textarea {
     width: 100%;
+    height: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    resize: none;
+    padding: 10px;
+}
+
+.emojionearea {
+	width: 100%;
     height: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -158,10 +168,6 @@ body {
     cursor: pointer;
 }
 
-#conversation-message {
-    background-color: grey;
-}
-
 #users-list {
     height: 80%;
     overflow-y: scroll;
@@ -176,6 +182,10 @@ body {
    color: lightgrey;
 }
 
+.focus {
+	color: #007BFF !important;
+}
+
 .user {
     display: inline-block;
     border: 1px solid #CCC;
@@ -188,17 +198,28 @@ body {
     margin-bottom: 1px;
     text-align: center;
 }
-.user:active {
-    color:green;
-    box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
-}
 
-.user:focus {
-    color: blue !important;
-}
-
-#messages ul {
+#messages #messages-list {
   list-style: none;
+  list-style-type: none;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+#messages #messages-list li {
+  border-radius: 10px;
+  max-width: 70%;
+  min-height: 20px;
+  min-width: 20px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  clear: both;
+}
+
+.welcome {
+	color: white;
 }
 
 .float-r {
@@ -208,11 +229,23 @@ body {
 .recipientMessage {
     text-align: left;
     margin-left: 2px;
+    background-color: #E9E8EB;
+    color: black;
+    float: left;
+    clear: left;
 }
 
 .senderMessage {
-    text-align: right;
+    text-align: left;
     margin-right: 2px;
+    background-color: #0A80FE;
+    color: white;
+    float: right;
+    clear: right;
+}
+
+.new-message {
+	background: orange !important;
 }
 
 .send-error {

@@ -26,6 +26,9 @@ public class ConversationController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private MessageNotificationController messageNotificationController;
+
     @GetMapping(value = "{recipient}")
     public List<MessageResponseTemplate> getConversation(
             @PathVariable String recipient,
@@ -54,6 +57,8 @@ public class ConversationController {
         messages.stream()
                 .forEach(message ->
                         messageResponseTemplates.add(new MessageResponseTemplate(message)));
+
+        messageNotificationController.notificationReceived(recipient, owner);
 
         return messageResponseTemplates;
 

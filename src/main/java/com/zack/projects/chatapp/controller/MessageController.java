@@ -1,22 +1,16 @@
 package com.zack.projects.chatapp.controller;
 
-import antlr.ASTNULLType;
 import com.zack.projects.chatapp.VO.MessageRequestTemplate;
 import com.zack.projects.chatapp.VO.MessageResponseTemplate;
 import com.zack.projects.chatapp.entity.*;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
-import com.zack.projects.chatapp.repository.MessageRepository;
-import com.zack.projects.chatapp.repository.UserRepository;
 import com.zack.projects.chatapp.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/messages")
@@ -26,8 +20,12 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private MessageNotificationController messageNotificationController;
+
     @PostMapping("/send")
-    public MessageResponseTemplate sendMessage(@RequestBody Message message) throws UserNameNotFoundException {
+    public MessageResponseTemplate sendMessage(@RequestBody Message message)
+            throws UserNameNotFoundException {
         log.info(String.format("Sending request to sendMessage in messageService"));
         return messageService.sendMessage(message);
     }
@@ -35,7 +33,8 @@ public class MessageController {
     @PostMapping("/sendMessage")
     public MessageResponseTemplate sendMessage2(
             @RequestBody MessageRequestTemplate messageRequestTemplate,
-            HttpServletRequest httpServletRequest) throws UserNameNotFoundException {
+            HttpServletRequest httpServletRequest)
+            throws UserNameNotFoundException {
 
         log.info(String.format("Sending request to sendMessage in messageService"));
 
@@ -48,6 +47,11 @@ public class MessageController {
         SenderRecipient senderRecipient = new SenderRecipient(sender, messageRequestTemplate.getRecipient());
 
         message.setSenderRecipient(senderRecipient);
+
+        log.info(String.format("Setting message sent date"));
+        message.setDateSent(new Timestamp(System.currentTimeMillis()));
+
+        messageNotificationController.deliverMessage(message);
 
         return messageService.sendMessage(message);
     }

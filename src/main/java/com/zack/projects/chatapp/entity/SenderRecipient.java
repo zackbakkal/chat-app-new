@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class SenderRecipient implements Serializable {
 
     private String sender;
