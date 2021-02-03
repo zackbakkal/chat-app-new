@@ -3,8 +3,8 @@ package com.zack.projects.chatapp.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Entity
 @Table(name = "conversations")
@@ -19,6 +19,6 @@ public class UserConversation {
     private ConversationId conversationId;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private Collection<Message> messages = new ArrayList<>();
+    private Collection<Message> messages = new CopyOnWriteArrayList<>();
 
 }

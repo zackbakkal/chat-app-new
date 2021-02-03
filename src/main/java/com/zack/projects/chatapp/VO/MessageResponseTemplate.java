@@ -23,4 +23,9 @@ public class MessageResponseTemplate {
         this.dateSent = message.getDateSent();
     }
 
+    public MessageResponseTemplate(MessageNotificationTemplate messageNotificationTemplate) {
+        this.senderRecipient.setRecipient(messageNotificationTemplate.getRecipient());
+        this.senderRecipient.setSender(messageNotificationTemplate.getSender());
+    }
+
 }

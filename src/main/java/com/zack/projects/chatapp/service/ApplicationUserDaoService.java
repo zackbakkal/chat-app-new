@@ -3,6 +3,7 @@ package com.zack.projects.chatapp.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.zack.projects.chatapp.controller.MessageNotificationController;
 import com.zack.projects.chatapp.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,18 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 	@Autowired
 	private final UserService userService;
 
-	public ApplicationUserDaoService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserService userService) {
+	@Autowired
+	private final MessageNotificationController messageNotificationController;
+
+	public ApplicationUserDaoService(UserRepository userRepository,
+									 PasswordEncoder passwordEncoder,
+									 UserService userService,
+									 MessageNotificationController messageNotificationController) {
 		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.userService = userService;
+		this.messageNotificationController = messageNotificationController;
 	}
 
 	@Override
@@ -51,6 +59,8 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 			this.userService.setUserOnline(user);
 			log.info("Save the user object");
 			this.userRepository.save(user);
+			log.info("Notify all users");
+			messageNotificationController.updateUsersList();
 		}
 		
 		return applicationUser;

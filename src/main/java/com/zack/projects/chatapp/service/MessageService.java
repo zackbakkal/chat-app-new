@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,54 +30,89 @@ public class MessageService {
     @Autowired
     private ConversationRepository conversationRepository;
 
-    public MessageResponseTemplate sendMessage(Message message) throws UserNameNotFoundException {
+    public MessageResponseTemplate sendMessage(Message message)
+            throws UserNameNotFoundException {
 
-        log.info(String.format("Retrieving the message sender with username [%s]",
-                message.getSenderRecipient().getSender()));
-        User user = userRepository.findUserByUsername(message.getSenderRecipient().getSender());
-
-        log.info(String.format("Setting message sent date"));
-        message.setDateSent(new Timestamp(System.currentTimeMillis()));
+        log.info(String.format("Retrieving the sender with username [%s] and recipient with username [%s]",
+                message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
+        User senderUser = userRepository.findUserByUsername(message.getSenderRecipient().getSender());
+        User receiverUser = userRepository.findUserByUsername(message.getSenderRecipient().getRecipient());
 
         log.info(String.format("Generating conversation id as ([%s], [%s])",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
-        ConversationId conversationId =
+        ConversationId senderConversationId =
                 new ConversationId(
                         message.getSenderRecipient().getSender(),
                         message.getSenderRecipient().getRecipient());
 
+        log.info(String.format("Generating conversation id as ([%s], [%s])",
+                message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
+        ConversationId receiverConversationId =
+                new ConversationId(
+                        message.getSenderRecipient().getRecipient(),
+                        message.getSenderRecipient().getSender());
+
         log.info(String.format("Checking if a conversation between [%s] and [%s] exists already",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
-        Optional<UserConversation> optionalChatappUserConversation =
-                conversationRepository.findById(conversationId);
+        Optional<UserConversation> optionalSenderChatappUserConversation =
+                conversationRepository.findById(senderConversationId);
 
-        if (optionalChatappUserConversation.isPresent()) {
+        Optional<UserConversation> optionalReceiverChatappUserConversation =
+                conversationRepository.findById(receiverConversationId);
+
+        ConversationId conversationId =
+                new ConversationId(
+                        message.getSenderRecipient().getSender(),
+                        message.getSenderRecipient().getRecipient()); ;
+
+        if (optionalSenderChatappUserConversation.isPresent()) {
+            System.out.println("found 1");
             log.info(String.format("Conversation with id ([%s], [%s]) exists",
                     message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
             log.info(String.format("Saving message to the conversation"));
-            optionalChatappUserConversation.get().getMessages().add(message);
+            optionalSenderChatappUserConversation.get().getMessages().add(message);
             log.info(String.format("Saving the conversation"));
-            conversationRepository.save(optionalChatappUserConversation.get());
+            conversationRepository.save(optionalSenderChatappUserConversation.get());
+
+            return new MessageResponseTemplate(message);
+
+        } else if (optionalReceiverChatappUserConversation.isPresent()) {
+            System.out.println("found 2");
+            log.info(String.format("Conversation with id ([%s], [%s]) exists",
+                    message.getSenderRecipient().getRecipient(), message.getSenderRecipient().getSender()));
+            log.info(String.format("Saving message to the conversation"));
+            optionalReceiverChatappUserConversation.get().getMessages().add(message);
+            log.info(String.format("Saving the conversation"));
+            conversationRepository.save(optionalReceiverChatappUserConversation.get());
+
+            conversationId.setSender(message.getSenderRecipient().getRecipient());
+            conversationId.setRecipient(message.getSenderRecipient().getSender());
 
             return new MessageResponseTemplate(message);
         }
 
+        System.out.println("found none");
+
         log.info(String.format("Conversation between [%s] and [%s] does not exist",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
-        UserConversation userConversation = new UserConversation();
+        UserConversation senderUserConversation = new UserConversation();
+        UserConversation receiverUserConversation = new UserConversation();
 
         log.info(String.format("Creating a conversation between [%s] and [%s] with conversation id [%s]",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient(), conversationId));
-        userConversation.setConversationId(conversationId);
+        senderUserConversation.setConversationId(conversationId);
+        receiverUserConversation.setConversationId(receiverConversationId);
 
         log.info(String.format("Add message to the conversation"));
-        userConversation.getMessages().add(message);
+        senderUserConversation.getMessages().add(message);
 
         log.info(String.format("Add conversation to the user"));
-        user.getUserConversations().add(userConversation);
+        senderUser.getUserConversations().add(senderUserConversation);
+        receiverUser.getUserConversations().add(receiverUserConversation);
 
         log.info(String.format("Save the user"));
-        userRepository.save(user);
+        userRepository.save(senderUser);
+        userRepository.save(receiverUser);
 
         return new MessageResponseTemplate(message);
 
@@ -96,4 +130,5 @@ public class MessageService {
                 .collect(Collectors.toList());
 
     }
+
 }

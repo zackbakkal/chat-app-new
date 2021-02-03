@@ -1,7 +1,6 @@
 package com.zack.projects.chatapp.controller;
 
 import com.zack.projects.chatapp.entity.User;
-import com.zack.projects.chatapp.exception.UserNameExistsException;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class ChatappLoginController {
     @PostMapping("register")
     public String registerUser(
             @ModelAttribute("user") User user,
-            final RedirectAttributes redirectAttributes) throws UserNameExistsException {
+            final RedirectAttributes redirectAttributes) {
 
         redirectAttributes.addAttribute("user", user);
 

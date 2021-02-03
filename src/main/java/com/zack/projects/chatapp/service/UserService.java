@@ -76,9 +76,6 @@ public class UserService {
         UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
                 new UserOnlineStatusResponseTemplate(user.getUsername(), user.isOnline());
 
-        log.info(String.format("Saving user"));
-        userRepository.save(user);
-
         return userOnlineStatusResponseTemplate;
     }
 
@@ -169,6 +166,20 @@ public class UserService {
                         userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
 
         return userOnlineStatusResponseTemplates;
+    }
+
+    public List<UserOnlineStatusResponseTemplate> getUsersStatus() {
+
+        List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
+
+        userRepository
+                .findAll()
+                .stream()
+                .forEach(user ->
+                        userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
+
+        return userOnlineStatusResponseTemplates;
+
     }
 
 }
