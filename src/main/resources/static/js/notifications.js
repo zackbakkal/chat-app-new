@@ -29,8 +29,21 @@ $(document).ready(function() {
 	});
 
 	eventSource.addEventListener("updateUsersList", function(event) {
-		getOnlineUsers();
-		getOfflineUsers();
+
+		userOnlineStatus = JSON.parse(event.data);
+
+		var username = userOnlineStatus.username;
+		var online = userOnlineStatus.online;
+
+		var newClass = (online) ? "online" : "offline";
+		var oldClass = (newClass === "offline") ? "online" : "offline";
+
+		$("#" + username).removeClass(oldClass);
+		$("#" + username).addClass(newClass);
+
+		var newUsersList = newClass + "-users";
+
+		$("#" + username).appendTo($("#" + newUsersList));
 
     });
 

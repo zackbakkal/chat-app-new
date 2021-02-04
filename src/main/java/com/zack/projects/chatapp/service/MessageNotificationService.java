@@ -125,15 +125,21 @@ public class MessageNotificationService {
 
     }
 
-    public void updateUsersList() {
+    public void updateUsersList(String username, boolean status) {
 
         Collection<SseEmitter> sseEmittersValues = sseEmitters.values();
+
+        UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
+                new UserOnlineStatusResponseTemplate(username, status);
 
         sseEmittersValues
                 .forEach(sseEmitter ->
                 {
                     try {
-                        sseEmitter.send(SseEmitter.event().name("updateUsersList").data("update"));
+                        sseEmitter
+                                .send(SseEmitter
+                                        .event()
+                                        .name("updateUsersList").data(userOnlineStatusResponseTemplate));
                     } catch (IOException e) {
                         sseEmitters.remove(sseEmitter);
                     }

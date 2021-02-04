@@ -8,6 +8,7 @@ import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import com.zack.projects.chatapp.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ProfileResponseTemplate saveUser(User user) throws UserNameExistsException {
         log.info(String.format("Checking if username [%s] already exists", user.getUsername()));
         boolean userNameExists = userRepository.existsById(user.getUsername());
@@ -31,6 +35,9 @@ public class UserService {
         }
 
         log.info(String.format("username [%s] is available: ", user.getUsername()));
+
+        log.info("Encoding password");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         log.info("Activating user account");
         activateUserAccount(user);
