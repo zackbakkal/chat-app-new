@@ -40,39 +40,42 @@
 </style>
 <body>
 
-<div class="chatapp-container">
-    <div class="toppane">
-        <form method="get" th:action="@{/logout}">
-            <span id="username">@[[${#httpServletRequest.remoteUser}]]</span>
-            <button class="btn btn-sm btn-primary float-r" type="submit">Logout</button>
-        </form>
-    </div>
-
-    <div class="leftpane">
-        <div id="online-users-title">Users</div>
-        <div id="users-list">
-            <div id="online-users"></div>
-            <div id="offline-users"></div>
+    <div class="chatapp-container">
+        <div class="toppane">
+            <form method="get" th:action="@{/logout}">
+                <span id="username">@[[${#httpServletRequest.remoteUser}]]</span>
+                <button class="btn btn-sm btn-primary float-r" type="submit">Logout</button>
+            </form>
         </div>
 
-    </div>
+        <div class="flex-container-main">
+            <div class="leftpane">
+                <div id="online-users-title">Users</div>
+                <div id="users-list">
+                    <div id="online-users"></div>
+                    <div id="offline-users"></div>
+                </div>
 
-    <div class="middlepane">
-        <div id="messages">
-            <ul id="messages-list"></ul>
-        </div>
-
-        <div id="message-send">
-            <div id="message" >
-                <textarea placeholder="Message..." id="sentmessage" name="text" autofocus></textarea>
             </div>
-            <div id="send">
-                <button id="send-button" type="submit" name="send" >Send</button>
+
+            <div class="middlepane">
+                <div id="messages">
+                    <ul id="messages-list"></ul>
+                </div>
+
+                <div id="message-send" class="flex-container-message-send">
+                    <div id="message" >
+                        <textarea placeholder="Message..." id="sentmessage" name="text" autofocus></textarea>
+                    </div>
+                    <div id="send">
+                        <button id="send-button" type="submit" name="send" >Send</button>
+                    </div>
+                </div>
+
             </div>
+
         </div>
 
     </div>
-
-</div>
 </body>
 </html>

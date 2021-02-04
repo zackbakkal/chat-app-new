@@ -26,7 +26,11 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @SneakyThrows
     @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication)
+            throws IOException, ServletException {
 
         log.info(String.format("Logging out user [%s]", authentication.getName()));
         userService.setUserOffline(authentication.getName());

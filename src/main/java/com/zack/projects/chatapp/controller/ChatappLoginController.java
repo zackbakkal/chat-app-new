@@ -63,13 +63,4 @@ public class ChatappLoginController {
 
     }
 
-    @PutMapping("logout")
-    public String logout(HttpServletRequest httpServletRequest) throws UserNameNotFoundException {
-
-        log.info(String.format("loging out: " + httpServletRequest.getRemoteUser()));
-        userController.setUserOffline(httpServletRequest.getRemoteUser());
-
-        return "login";
-    }
-
 }
