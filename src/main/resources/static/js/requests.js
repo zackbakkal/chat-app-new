@@ -1,6 +1,6 @@
-var currentConversation;
+var currentConversation = null;
 var recipient;
-var tabIndex = 1;
+var tabIndex;
 
 $(document).ready(function () {
 
@@ -23,6 +23,7 @@ $(document).ready(function () {
 
 
 function getOnlineUsers() {
+	tabIndex = 1;
 	$.ajax({
             type: "GET",
             url: "users/online",
@@ -39,7 +40,7 @@ function getOnlineUsers() {
     				$("#" + onlineUser.username).attr("tabIndex", tabIndex++);
 
                     $("#" + onlineUser.username).click(function () {
-    					if(currentConversation !== null) {
+    					if(currentConversation !== null && currentConversation.attr("id") !== onlineUser.username) {
                             $(currentConversation).attr("data-clicked", false);
                             $(currentConversation).removeClass("focus");
                         }
@@ -49,6 +50,7 @@ function getOnlineUsers() {
                         currentConversation = $("#" + onlineUser.username);
                         $(currentConversation).addClass("focus");
                         recipient = onlineUser.username;
+                        localStorage.setItem("recipient", recipient);
                         loadConversation(onlineUser.username);
                     });
                 });
@@ -64,10 +66,8 @@ function getOfflineUsers() {
             type: "GET",
             url: "users/offline",
             success: function (offlineUsers) {
-				console.log(offlineUsers);
                 $("#offline-users").empty();
                 $.each(offlineUsers, function (index, offlineUser) {
-					console.log(tabIndex + " " + offlineUser.username);
                     $("#offline-users").append('<div id="' + offlineUser.username + '"></div>');
 
                     $("#" + offlineUser.username).addClass("user");
@@ -77,7 +77,8 @@ function getOfflineUsers() {
 
 
                     $("#" + offlineUser.username).click(function () {
-                        if(currentConversation !== null) {
+
+                        if(currentConversation !== null && currentConversation.attr("id") !== offlineUser.username) {
                             $(currentConversation).attr("data-clicked", false);
                             $(currentConversation).removeClass("focus");
                         }
@@ -87,6 +88,7 @@ function getOfflineUsers() {
                         currentConversation = $("#" + offlineUser.username);
                         $(currentConversation).addClass("focus");
                         recipient = offlineUser.username;
+                        localStorage.setItem("recipient", recipient);
                         loadConversation(offlineUser.username);
                     });
                 });

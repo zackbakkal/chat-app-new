@@ -60,7 +60,7 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 			log.info("Save the user object");
 			this.userRepository.save(user);
 			log.info("Notify all users");
-			messageNotificationController.updateUsersList();
+			messageNotificationController.updateUsersList(user.getUsername(), true);
 		}
 		
 		return applicationUser;
@@ -77,7 +77,7 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 							-> {
 									applicationUsers.add(new ApplicationUser(
 											USER.getGrantedAuthorities(),
-											passwordEncoder.encode(user.getPassword()),
+											user.getPassword(),
 											user.getUsername(),
 											user.isAccountNonExpired(),
 											user.isAccountNonLocked(),

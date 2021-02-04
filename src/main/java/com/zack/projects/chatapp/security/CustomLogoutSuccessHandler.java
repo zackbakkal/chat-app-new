@@ -36,7 +36,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
         // TODO: Fix update users list. After the user logs out it disappear from the offline users.
         log.info("Notify all users");
-        messageNotificationController.updateUsersList();
+        messageNotificationController.updateUsersList(authentication.getName(), false);
 
         log.info(String.format("Redirecting to login page"));
         response.sendRedirect("/login");

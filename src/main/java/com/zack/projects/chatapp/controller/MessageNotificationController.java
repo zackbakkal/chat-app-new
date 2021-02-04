@@ -32,8 +32,8 @@ public class MessageNotificationController {
         messageNotificationService.deliverMissedMessages(recipient);
     }
 
-    public void updateUsersList() {
-        messageNotificationService.updateUsersList();
+    public void updateUsersList(String username, boolean status) {
+        messageNotificationService.updateUsersList(username, status);
     }
 
     public void notificationReceived(String sender, String recipient) {

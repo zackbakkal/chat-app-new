@@ -15,12 +15,12 @@
 <link
 	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
 	rel="stylesheet" crossorigin="anonymous" />
+<link
+	rel="stylesheet"
+	href="/css/register.css" />
+
 </head>
-<style>
-body {
-	background-color: #3e3e3e;
-	color: white;
-}
+
 </style>
 <body>
 	<div class="container">
@@ -30,6 +30,7 @@ body {
 				<label for="username" class="sr-only">Username</label> <input
 					type="text" th:field="*{username}" id="username" name="username" class="form-control"
 					placeholder="Username" required autofocus>
+				<p th:if="${error}" class="taken-error">&#9888; Username is taken.</p>
 			</p>
 			<p>
 				<label for="firstName" class="sr-only">Username</label> <input
