@@ -28,10 +28,24 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @GetMapping("/{username}")
-    public ProfileResponseTemplate getUser(@PathVariable String username) throws UserNameNotFoundException {
+    @GetMapping("/profile/{username}")
+    public ProfileResponseTemplate getUserProfile(@PathVariable String username) throws UserNameNotFoundException {
         log.info(String.format("Calling UserService to get user [%s]", username));
         return userService.getUserProfile(username);
+    }
+
+    @GetMapping("/{username}")
+    public UserOnlineStatusResponseTemplate searchUser(@PathVariable String username)
+            throws UserNameNotFoundException {
+        log.info(String.format("Calling UserService to get user [%s]", username));
+        return userService.searchUser(username);
+    }
+
+    @GetMapping("/startwith/{username}")
+    public List<UserOnlineStatusResponseTemplate> searchUsersStartWith(@PathVariable String username)
+            throws UserNameNotFoundException {
+        log.info(String.format("Calling UserService to get user [%s]", username));
+        return userService.searchUsersStartWith(username);
     }
 
     @GetMapping("/all")

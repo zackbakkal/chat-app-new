@@ -1,52 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
-<head>
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-<title>Login to ChatApp</title>
-<link
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-	crossorigin="anonymous">
-<link
-	href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css"
-	rel="stylesheet" crossorigin="anonymous" />
-<link rel="stylesheet" type="text/css" href="/css/login.css">
-</head>
-<body>
-	<div class="container">
-		<form class="form-signin" method="post" th:action="@{/login}">
-			<h2 class="form-signin-heading">Login to ChatApp</h2>
-			<p>
-				<label for="username" class="sr-only">Username</label> <input
-					type="text" id="username" name="username" class="form-control"
-					placeholder="Username" required autofocus>
-			</p>
-			<p>
-				<label for="password" class="sr-only">Password</label> <input
-					type="password" id="password" name="password" class="form-control"
-					placeholder="Password" required>
-			</p>
-			<p>
-				<input type="checkbox" id="remember-me" name="remember-me">
-				<label for="remember-me">Remember me?</label>
-			</p>
-			<div>
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-				<!-- Warning sign, &#9888; -->
-				<p th:if="${loginError}" class="login-error">&#9888; Authentication failed.</p>
-			</div>
-		</form>
-		<form class="form-signin" method="get" action="/register">
-			<p>
-				Not a member? Please Register
-			</p>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-		</form>
-	</div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Login to ChatApp</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form class="form-signin" method="post" th:action="@{/login}">
+        <h2 class="form-signin-heading">Login to ChatApp</h2>
+        <div class="input-group margin-bottom-sm">
+          <i class="icon-blue fa fa-user fa-fw"></i>
+          <input
+            class="form-control"
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Username"
+            required
+            autofocus
+          />
+        </div>
+        <div class="icon-blue input-group">
+          <i class="fa fa-key fa-fw"></i>
+          <input
+            class="form-control"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+            autofocus
+          />
+        </div>
+        <div>
+          <input type="checkbox" id="remember-me" name="remember-me" />
+          <label for="remember-me">Remember me?</label>
+        </div>
+        <div>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">
+            <i class="fa fa-sign-in"></i>Login
+          </button>
+          <p th:if="${loginError}" class="login-error">
+            <i id="exclamation-icon" class="fa fa-exclamation-triangle"></i>
+            Authentication failed.
+          </p>
+        </div>
+      </form>
+      <form class="form-signin" method="get" action="/register">
+        <p>Not a member? Please Register</p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+          <i class="fa fa-user"></i>Register
+        </button>
+      </form>
+    </div>
+  </body>
 </html>
