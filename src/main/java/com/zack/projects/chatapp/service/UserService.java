@@ -146,6 +146,7 @@ public class UserService {
 
         List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
 
+        log.info((String.format("Retrieving user with online status")));
         userRepository
                 .findAll()
                 .stream()
@@ -163,6 +164,7 @@ public class UserService {
 
         List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
 
+        log.info((String.format("Retrieving user with offline status")));
         userRepository
                 .findAll()
                 .stream()
@@ -179,10 +181,36 @@ public class UserService {
 
         List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
 
+        log.info((String.format("Retrieving users' statuses")));
         userRepository
                 .findAll()
                 .stream()
                 .forEach(user ->
+                        userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
+
+        return userOnlineStatusResponseTemplates;
+
+    }
+
+    public UserOnlineStatusResponseTemplate searchUser(String username) throws UserNameNotFoundException {
+
+        log.info((String.format("Searching username [%s]", username)));
+        User user = userRepository.findUserByUsername(username);
+        return new UserOnlineStatusResponseTemplate(user);
+
+    }
+
+    public List<UserOnlineStatusResponseTemplate> searchUsersStartWith(String startWith) {
+
+        List<UserOnlineStatusResponseTemplate> userOnlineStatusResponseTemplates = new ArrayList<>();
+
+        log.info((String.format("Searching usernames that start with [%s]", startWith)));
+        userRepository.findAll()
+                .stream()
+                .filter(user ->
+                        user.getUsername().startsWith(startWith))
+                .collect(Collectors.toList())
+                .forEach(user->
                         userOnlineStatusResponseTemplates.add(new UserOnlineStatusResponseTemplate(user)));
 
         return userOnlineStatusResponseTemplates;
