@@ -55,10 +55,13 @@
         </div>
         <div>
           <button class="btn btn-lg btn-primary btn-block" type="submit">
-            <i class="fa fa-sign-in"></i>Login
+            <i class="fa fa-sign-in fa-fw"></i>Login
           </button>
           <p th:if="${loginError}" class="login-error">
-            <i id="exclamation-icon" class="fa fa-exclamation-triangle"></i>
+            <i
+              id="exclamation-icon"
+              class="fa fa-exclamation-triangle fa-fw"
+            ></i>
             Authentication failed.
           </p>
         </div>
@@ -66,7 +69,7 @@
       <form class="form-signin" method="get" action="/register">
         <p>Not a member? Please Register</p>
         <button class="btn btn-lg btn-primary btn-block" type="submit">
-          <i class="fa fa-user"></i>Register
+          <i class="fa fa-user fa-fw"></i>Register
         </button>
       </form>
     </div>

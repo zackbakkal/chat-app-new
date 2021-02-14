@@ -63,8 +63,8 @@ body {
   border-collapse: collapse;
   margin: 1px;
   padding: 2px;
-  border: 8px ridge #007bff;
-  border-radius: 5px;
+  /* border: 8px ridge #007bff;
+  border-radius: 5px; */
   resize: horizontal;
   overflow: auto;
 }
@@ -78,7 +78,7 @@ body {
   padding: 0;
 }
 
-#online-users-title {
+/* #online-users-title {
   padding: 2px;
   margin: 2px;
   padding-left: 5px;
@@ -88,7 +88,7 @@ body {
   padding: 2px;
   margin: 2px;
   padding-left: 5px;
-}
+} */
 
 #online-users-list {
   padding: 2px;
@@ -102,7 +102,7 @@ body {
   padding-left: 5px;
 }
 
-#online-user::before {
+/* #online-user::before {
   content: "\2022";
   color: green;
   font-weight: bold;
@@ -118,13 +118,13 @@ body {
   display: inline-block;
   width: 1em;
   margin-left: 1em;
-}
+} */
 
 #messages {
   height: 100%;
   background-color: #1f201b;
-  border: 8px ridge #007bff;
-  border-radius: 5px;
+  /* border: 8px ridge #007bff;
+  border-radius: 5px; */
   color: black;
   overflow-y: scroll;
   margin-bottom: 1px;
@@ -135,8 +135,8 @@ body {
   margin-top: 1px;
   width: 100%;
   height: 20%;
-  border: 8px ridge #007bff;
-  border-radius: 5px;
+  /* border: 8px ridge #007bff;
+  border-radius: 5px; */
 }
 
 #message {
@@ -196,7 +196,7 @@ body {
 }
 
 .online {
-  color: green;
+  color: #00d432;
 }
 
 .offline {
@@ -217,7 +217,7 @@ body {
   width: 100%;
   padding: 5px;
   margin-bottom: 1px;
-  text-align: center;
+  text-align: left;
 }
 
 .user:hover {
@@ -268,7 +268,7 @@ body {
 }
 
 .new-message {
-  background: orange !important;
+  background: #4b7350 !important;
 }
 
 .send-error {
@@ -329,19 +329,31 @@ body {
   padding: 0;
 }
 
-#status-online {
+#status-available {
   background-color: #d4edda;
 }
+
+/* .available {
+  color: #00d432;
+} */
 
 #status-away {
   background-color: #fff3cd;
 }
 
+/* .away {
+  color: #ffbf00;
+} */
+
 #status-busy {
   background-color: #f8d7da;
 }
 
-#status-online:hover {
+/* .busy {
+  color: #ff0019;
+} */
+
+#status-available:hover {
   background-color: #00d432;
 }
 
@@ -350,9 +362,30 @@ body {
 }
 
 #status-busy:hover {
-  background-color: #ff0019d5;
+  background-color: #ff0019;
 }
 
 #logout-button {
   background-color: transparent;
+}
+
+.fa-circle {
+  color: #00d432;
+}
+
+.fa-circle-o {
+  color: #ffbf00;
+}
+
+.fa-circle-o-notch {
+  color: #ff0019;
+}
+
+.user .fa {
+  font-size: 0.5em !important;
+  padding-right: 1px;
+}
+
+#offline-users .user .fa {
+  color: grey !important;
 }

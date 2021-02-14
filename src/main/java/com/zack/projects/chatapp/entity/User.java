@@ -25,6 +25,7 @@ public class User {
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
+    private String availability;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "conversations", referencedColumnName = "username")

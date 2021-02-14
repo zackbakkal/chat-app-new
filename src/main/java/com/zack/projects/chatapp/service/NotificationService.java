@@ -2,9 +2,11 @@ package com.zack.projects.chatapp.service;
 
 import com.zack.projects.chatapp.VO.MessageResponseTemplate;
 import com.zack.projects.chatapp.VO.MissedMessageResponseTemplate;
+import com.zack.projects.chatapp.VO.UserAvailabilityResponseTemplate;
 import com.zack.projects.chatapp.VO.UserOnlineStatusResponseTemplate;
 import com.zack.projects.chatapp.entity.Message;
 import com.zack.projects.chatapp.entity.SenderRecipient;
+import com.zack.projects.chatapp.entity.User;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class MessageNotificationService {
+public class NotificationService {
 
     private Map<String, SseEmitter> sseEmitters = new HashMap<>();
 
@@ -58,7 +60,7 @@ public class MessageNotificationService {
 
         String username = message.getSenderRecipient().getRecipient();
 
-        UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate = userService.getUserStatus(username);
+        UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate = userService.getUserOnlineStatus(username);
         boolean online = userOnlineStatusResponseTemplate.isOnline();
 
         if(sseEmitter != null && online) {
@@ -105,7 +107,6 @@ public class MessageNotificationService {
                 try {
                     sseEmitter.send(SseEmitter.event().name("newMessage").data(sentMessage));
                     log.info(String.format("Notifications from [%s] sent successful", senderRecipient.getSender()));
-                    //missedEmitters.remove(senderRecipient);
                 } catch (IOException e) {
                     log.info(String.format("Notifications from [%s] failed", senderRecipient.getSender()));
                     sseEmitters.remove(sseEmitter);
@@ -125,12 +126,14 @@ public class MessageNotificationService {
 
     }
 
-    public void updateUsersList(String username, boolean status) {
+    public void updateStatusUsersList(String username, boolean status) throws UserNameNotFoundException {
 
         Collection<SseEmitter> sseEmittersValues = sseEmitters.values();
 
+        User user = userService.findUserByUsername(username);
+
         UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
-                new UserOnlineStatusResponseTemplate(username, status);
+                new UserOnlineStatusResponseTemplate(user);
 
         sseEmittersValues
                 .forEach(sseEmitter ->
@@ -144,6 +147,26 @@ public class MessageNotificationService {
                         sseEmitters.remove(sseEmitter);
                     }
                 });
+    }
+
+    public void updateAvailabilityUsersList(String username, String availability) {
+
+        Collection<SseEmitter> sseEmittersValues = sseEmitters.values();
+
+        UserAvailabilityResponseTemplate userAvailabilityResponseTemplate =
+                new UserAvailabilityResponseTemplate(username, availability);
+
+        sseEmittersValues
+                .forEach(sseEmitter ->
+                        {
+                            try {
+                                sseEmitter
+                                        .send(SseEmitter
+                                        .event().name("updateAvailability").data(userAvailabilityResponseTemplate));
+                            } catch (IOException e) {
+                                sseEmitters.remove(sseEmitter);
+                            }
+                        });
 
     }
 }

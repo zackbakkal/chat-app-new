@@ -27,7 +27,7 @@ public class ConversationController {
     private MessageService messageService;
 
     @Autowired
-    private MessageNotificationController messageNotificationController;
+    private NotificationController notificationController;
 
     @GetMapping(value = "{recipient}")
     public List<MessageResponseTemplate> getConversation(
@@ -58,7 +58,7 @@ public class ConversationController {
                 .forEach(message ->
                         messageResponseTemplates.add(new MessageResponseTemplate(message)));
 
-        messageNotificationController.notificationReceived(recipient, owner);
+        notificationController.notificationReceived(recipient, owner);
 
         return messageResponseTemplates;
 

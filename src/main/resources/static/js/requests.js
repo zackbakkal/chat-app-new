@@ -119,9 +119,7 @@ function logout() {
       getLoginPage();
     },
     error: function (e) {
-      $("#messages-list").append(
-        '<li class="send-error">Message could not be sent</li>'
-      );
+      console.log("Error loging out");
     },
   });
 }
@@ -132,11 +130,26 @@ function getLoginPage() {
 
 function listUser(user) {
   var status = user.online ? "online" : "offline";
+  var availability = user.availability;
+  var icon;
 
   $("#" + status + "-users").append('<div id="' + user.username + '"></div>');
   $("#" + user.username).addClass("user");
-  $("#" + user.username).addClass(status);
-  $("#" + user.username).text(user.username);
+
+  if (user.online) {
+    icon =
+      availability === "available" || availability === "busy"
+        ? '<i class="fa fa-circle fa-xs"></i>'
+        : '<i class="fa fa-circle-o fa-xs"></i>';
+
+    $("#" + user.username).addClass(availability);
+  } else {
+    $("#" + user.username).addClass(status);
+    icon = '<i class="fa fa-circle-o-notch fa-xs"></i>';
+  }
+
+  $("#" + user.username).append(icon);
+  $("#" + user.username).append(user.username);
   $("#" + user.username).attr("tabIndex", tabIndex++);
 
   $("#" + user.username).click(function () {
@@ -156,4 +169,24 @@ function listUser(user) {
     localStorage.setItem("recipient", recipient);
     loadConversation(user.username);
   });
+}
+
+function getUserAvailability(username) {
+  $.ajax({
+    type: "GET",
+    url: "users/" + username + "/availability",
+    success: function (userAvailability) {
+      var username = userAvailability.username;
+      var availability = userAvailability.availability;
+
+      setAvailabilityClass(username, availability);
+    },
+    error: function () {
+      console.log("Error changing status");
+    },
+  });
+}
+
+function setAvailabilityClass(username, availability) {
+  $("#" + username).attr("class", "user " + availability);
 }

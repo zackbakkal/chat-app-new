@@ -21,7 +21,7 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
-    private MessageNotificationController messageNotificationController;
+    private NotificationController notificationController;
 
     @PostMapping("/send")
     public MessageResponseTemplate sendMessage(@RequestBody Message message)
@@ -51,7 +51,7 @@ public class MessageController {
         log.info(String.format("Setting message sent date"));
         message.setDateSent(new Timestamp(System.currentTimeMillis()));
 
-        messageNotificationController.deliverMessage(message);
+        notificationController.deliverMessage(message);
 
         return messageService.sendMessage(message);
     }

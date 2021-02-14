@@ -2,6 +2,8 @@ package com.zack.projects.chatapp.service;
 
 import com.zack.projects.chatapp.VO.ProfileResponseTemplate;
 import com.zack.projects.chatapp.VO.UserOnlineStatusResponseTemplate;
+import com.zack.projects.chatapp.VO.UserAvailabilityResponseTemplate;
+import com.zack.projects.chatapp.controller.NotificationController;
 import com.zack.projects.chatapp.entity.User;
 import com.zack.projects.chatapp.exception.UserNameExistsException;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
@@ -25,6 +27,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private NotificationController notificationController;
+
     public ProfileResponseTemplate saveUser(User user) throws UserNameExistsException {
         log.info(String.format("Checking if username [%s] already exists", user.getUsername()));
         boolean userNameExists = userRepository.existsById(user.getUsername());
@@ -41,6 +46,12 @@ public class UserService {
 
         log.info("Activating user account");
         activateUserAccount(user);
+
+        log.info("Setting user availability to available");
+        activateUserAccount(user);
+
+        log.info("Setting user availability");
+        initializeUserAvailability(user);
 
         log.info(String.format("Adding user: [%s]", user));
         userRepository.save(user);
@@ -81,7 +92,7 @@ public class UserService {
 
         log.info(String.format("Generating [%s] online status", username));
         UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
-                new UserOnlineStatusResponseTemplate(user.getUsername(), user.isOnline());
+                new UserOnlineStatusResponseTemplate(user);
 
         return userOnlineStatusResponseTemplate;
     }
@@ -100,7 +111,7 @@ public class UserService {
 
         log.info(String.format("Generating [%s] online status", username));
         UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
-                new UserOnlineStatusResponseTemplate(user.getUsername(), user.isOnline());
+                new UserOnlineStatusResponseTemplate(user);
 
         log.info(String.format("Saving user"));
         userRepository.save(user);
@@ -113,13 +124,13 @@ public class UserService {
         user.setOnline(false);;
     }
 
-    public UserOnlineStatusResponseTemplate getUserStatus(String username) throws UserNameNotFoundException {
+    public UserOnlineStatusResponseTemplate getUserOnlineStatus(String username) throws UserNameNotFoundException {
 
         User user = findUserByUsername(username);
 
         log.info(String.format("Generating [%s] online status", username));
         UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
-                new UserOnlineStatusResponseTemplate(user.getFirstName(), user.isOnline());
+                new UserOnlineStatusResponseTemplate(user);
 
         return userOnlineStatusResponseTemplate;
     }
@@ -132,7 +143,11 @@ public class UserService {
         user.setEnabled(true);
     }
 
-    private User findUserByUsername(String username) throws UserNameNotFoundException {
+    public void initializeUserAvailability(User user) {
+        user.setAvailability("available");
+    }
+
+    public User findUserByUsername(String username) throws UserNameNotFoundException {
         log.info(String.format("Looking for username: [%s]", username));
         return userRepository.findById(username)
                 .orElseThrow(() -> {
@@ -217,4 +232,26 @@ public class UserService {
 
     }
 
+    public UserAvailabilityResponseTemplate getUserAvailability(String username) throws UserNameNotFoundException {
+
+        log.info((String.format("Retrieving user with username [%s]", username)));
+        User user = userRepository.findById(username).get();
+        return new UserAvailabilityResponseTemplate(user);
+
+    }
+
+    public UserAvailabilityResponseTemplate setUserAvailability(String username, String availability) throws UserNameNotFoundException {
+
+        log.info((String.format("Retrieving user with username [%s]", username)));
+        User user = userRepository.findById(username).get();
+        log.info((String.format("Setting user's availability to [%s]", availability)));
+        user.setAvailability(availability);
+        log.info("Saving user");
+        userRepository.save(user);
+        log.info(String.format("Notify Users that user [%s] has changed his status to [%s]", username, availability));
+        notificationController.updateAvailabilityUsersList(username, availability);
+
+        return new UserAvailabilityResponseTemplate(user);
+
+    }
 }

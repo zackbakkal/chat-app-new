@@ -2,15 +2,16 @@ package com.zack.projects.chatapp.controller;
 
 import com.zack.projects.chatapp.VO.ProfileResponseTemplate;
 import com.zack.projects.chatapp.VO.UserOnlineStatusResponseTemplate;
+import com.zack.projects.chatapp.VO.UserAvailabilityResponseTemplate;
 import com.zack.projects.chatapp.entity.User;
 import com.zack.projects.chatapp.exception.UserNameExistsException;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import com.zack.projects.chatapp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -54,11 +55,28 @@ public class UserController {
         return userService.getUsersProfiles();
     }
 
-    @GetMapping("/{username}/status")
-    public UserOnlineStatusResponseTemplate getUserStatus(@PathVariable String username)
+    @GetMapping("/{username}/onlineStatus")
+    public UserOnlineStatusResponseTemplate getUserOnlineStatus(@PathVariable String username)
             throws UserNameNotFoundException {
         log.info(String.format("Calling UserService to get user [%s] status", username));
-        return userService.getUserStatus(username);
+        return userService.getUserOnlineStatus(username);
+    }
+
+    @GetMapping("/{username}/availability")
+    public UserAvailabilityResponseTemplate getUserAvailability(@PathVariable String username)
+            throws UserNameNotFoundException {
+        log.info(String.format("Calling UserService to get user [%s] availability", username));
+        return userService.getUserAvailability(username);
+    }
+
+    @PutMapping("/availability/{availability}")
+    public UserAvailabilityResponseTemplate setUserAvailability(
+            @PathVariable String availability,
+            HttpServletRequest httpServletRequest) throws UserNameNotFoundException {
+
+        String username = httpServletRequest.getRemoteUser();
+        log.info(String.format("Calling UserService to set user [%s] availability", username));
+        return userService.setUserAvailability(username, availability);
     }
 
     @PutMapping("/{username}/online")
