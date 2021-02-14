@@ -53,13 +53,29 @@ $(document).ready(function () {
 
     function listUser(user) {
       var status = user.online ? "online" : "offline";
+      var availability = user.availability;
+      var icon;
 
       $("#" + status + "-users").append(
         '<div id="' + user.username + '"></div>'
       );
       $("#" + user.username).addClass("user");
-      $("#" + user.username).addClass(status);
-      $("#" + user.username).text(user.username);
+
+      if (user.online) {
+        icon =
+          availability === "available" || availability === "busy"
+            ? '<i class="fa fa-circle fa-xs"></i>'
+            : '<i class="fa fa-circle-o fa-xs"></i>';
+
+        $("#" + user.username).addClass(availability);
+      } else {
+        $("#" + user.username).addClass(status);
+        icon = '<i class="fa fa-circle-o-notch fa-xs"></i>';
+      }
+
+      $("#" + user.username).append(icon);
+
+      $("#" + user.username).append(user.username);
       $("#" + user.username).attr("tabIndex", tabIndex++);
 
       $("#" + user.username).click(function () {

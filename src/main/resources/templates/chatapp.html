@@ -45,6 +45,7 @@
     <script src="/js/emojionearea.js"></script>
     <script src="/js/notifications.js"></script>
     <script src="/js/searchuser.js"></script>
+    <script src="/js/changeavailability.js"></script>
   </head>
   <style></style>
   <body>
@@ -73,7 +74,7 @@
                   ><i class="fa fa-pencil fa-fw"></i>Status</a
                 >
                 <div class="dropdown-menu" id="status">
-                  <a href="#" id="status-online" class="dropdown-item ">Online</a>
+                  <a href="#" id="status-available" class="dropdown-item">Active</a>
                   <a href="#" id="status-away" class="dropdown-item ">Away</a>
                   <a href="#" id="status-busy" class="dropdown-item ">Busy</a>
               </li>
@@ -85,39 +86,12 @@
                   class="btn btn-sm btn-primary float-right"
                   type="submit"
                 >
-                  <i class="fa fa-sign-out"></i>Logout
+                  <i class="fa fa-sign-out fa-fw"></i>Logout
                 </button>
               </li>
             </ul>
           </div>
         </nav>
-
-        <!-- <nav class="navbar navbar-inverse">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <a class="navbar-brand" href="#">ChatApp</a>
-            </div>
-            <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown">
-                <i class="fa fa-pencil fa-fw"></i><a class="dropdown-toggle" data-toggle="dropdown" href="#">Status <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><div class="status" id="status-online">Online</div></li>
-                  <li><div class="status" id="status-away">Away</div></li>
-                  <li><div class="status" id="status-busy">Busy</div></li>
-                </ul>
-              </li>
-              <li>
-                <button
-                  id="logout-button"
-                  class="btn btn-sm btn-primary float-right"
-                  type="submit"
-                >
-                  <i class="fa fa-sign-out"></i>Logout
-                </button>
-              </li>
-            </ul>
-          </div>
-        </nav> -->
       </div>
 
       <div class="flex-container-main">
@@ -133,7 +107,7 @@
                   placeholder="Search..."
                   aria-label="Search"
                 />
-                <i id="remove-icon" class="fa fa-remove"></i>
+                <i id="remove-icon" class="fa fa-remove fa-fw"></i>
               </div>
             </form>
           </div>
@@ -160,7 +134,7 @@
             </div>
             <div id="send">
               <button id="send-button" type="submit" name="send">
-                <i class="fa fa-send"></i>
+                <i class="fa fa-send fa-fw"></i>
               </button>
             </div>
           </div>

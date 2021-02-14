@@ -2,7 +2,7 @@ package com.zack.projects.chatapp.controller;
 
 import com.zack.projects.chatapp.entity.Message;
 import com.zack.projects.chatapp.exception.UserNameNotFoundException;
-import com.zack.projects.chatapp.service.MessageNotificationService;
+import com.zack.projects.chatapp.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,31 +13,35 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/notifications")
 @Slf4j
-public class MessageNotificationController {
+public class NotificationController {
 
     @Autowired
-    private MessageNotificationService messageNotificationService;
+    private NotificationService notificationService;
 
     @GetMapping("subscribe")
     public SseEmitter subscribe(HttpServletRequest httpServletRequest) {
         String username = httpServletRequest.getRemoteUser();
-        return messageNotificationService.subscribeUser(username);
+        return notificationService.subscribeUser(username);
     }
 
     public void deliverMessage(Message message) throws UserNameNotFoundException {
-        messageNotificationService.deliverMessage(message);
+        notificationService.deliverMessage(message);
     }
 
     public void deliverMissedMessage(String recipient) {
-        messageNotificationService.deliverMissedMessages(recipient);
+        notificationService.deliverMissedMessages(recipient);
     }
 
-    public void updateUsersList(String username, boolean status) {
-        messageNotificationService.updateUsersList(username, status);
+    public void updateStatusUsersList(String username, boolean status) throws UserNameNotFoundException {
+        notificationService.updateStatusUsersList(username, status);
+    }
+
+    public void updateAvailabilityUsersList(String username, String availability) {
+        notificationService.updateAvailabilityUsersList(username, availability);
     }
 
     public void notificationReceived(String sender, String recipient) {
-        messageNotificationService.notificationReceived(sender, recipient);
+        notificationService.notificationReceived(sender, recipient);
     }
 
 }

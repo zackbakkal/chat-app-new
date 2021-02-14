@@ -8,15 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserOnlineStatusResponseTemplate {
+public class UserAvailabilityResponseTemplate {
 
     private String username;
-    private boolean online;
     private String availability;
 
-    public UserOnlineStatusResponseTemplate(User user) {
+    public UserAvailabilityResponseTemplate(User user) {
         this.username = user.getUsername();
-        this.online = user.isOnline();
         this.availability = user.getAvailability();
     }
 

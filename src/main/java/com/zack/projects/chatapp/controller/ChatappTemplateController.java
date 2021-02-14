@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class ChatappTemplateController {
 
     @Autowired
-    private MessageNotificationController messageNotificationController;
+    private NotificationController notificationController;
 
     @GetMapping
     public String getChatapp() {

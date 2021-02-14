@@ -33,6 +33,48 @@ public class MessageService {
     public MessageResponseTemplate sendMessage(Message message)
             throws UserNameNotFoundException {
 
+        if(message.getSenderRecipient().getSender().equals(message.getSenderRecipient().getRecipient())) {
+            User user = userRepository.findUserByUsername(message.getSenderRecipient().getSender());
+
+            ConversationId conversationId =
+                    new ConversationId(
+                            user.getUsername(),
+                            user.getUsername());
+
+            Optional<UserConversation> optionalSenderChatappUserConversation =
+                    conversationRepository.findById(conversationId);
+
+            if(optionalSenderChatappUserConversation.isPresent()) {
+                log.info(String.format("Conversation with id ([%s], [%s]) exists",
+                        message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
+                log.info(String.format("Saving message to the conversation"));
+                optionalSenderChatappUserConversation.get().getMessages().add(message);
+                log.info(String.format("Saving the conversation"));
+                conversationRepository.save(optionalSenderChatappUserConversation.get());
+
+            } else {
+                log.info(String.format("Conversation between [%s] and [%s] does not exist",
+                        message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
+                UserConversation conversation = new UserConversation();
+
+                log.info(String.format("Creating a conversation between [%s] and [%s] with conversation id [%s]",
+                        message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient(), conversationId));
+                conversation.setConversationId(conversationId);
+
+                log.info(String.format("Add message to the conversation"));
+                conversation.getMessages().add(message);
+
+                log.info(String.format("Add conversation to the user"));
+                user.getUserConversations().add(conversation);
+
+                log.info(String.format("Save the user"));
+                userRepository.save(user);
+
+            }
+            return new MessageResponseTemplate(message);
+
+        }
+
         log.info(String.format("Retrieving the sender with username [%s] and recipient with username [%s]",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
         User senderUser = userRepository.findUserByUsername(message.getSenderRecipient().getSender());
@@ -66,7 +108,7 @@ public class MessageService {
                         message.getSenderRecipient().getRecipient()); ;
 
         if (optionalSenderChatappUserConversation.isPresent()) {
-            System.out.println("found 1");
+
             log.info(String.format("Conversation with id ([%s], [%s]) exists",
                     message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));
             log.info(String.format("Saving message to the conversation"));
@@ -90,8 +132,6 @@ public class MessageService {
 
             return new MessageResponseTemplate(message);
         }
-
-        System.out.println("found none");
 
         log.info(String.format("Conversation between [%s] and [%s] does not exist",
                 message.getSenderRecipient().getSender(), message.getSenderRecipient().getRecipient()));

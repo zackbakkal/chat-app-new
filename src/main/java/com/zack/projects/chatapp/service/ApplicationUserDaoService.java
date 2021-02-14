@@ -3,8 +3,9 @@ package com.zack.projects.chatapp.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.zack.projects.chatapp.controller.MessageNotificationController;
+import com.zack.projects.chatapp.controller.NotificationController;
 import com.zack.projects.chatapp.entity.User;
+import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,17 +31,17 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 	private final UserService userService;
 
 	@Autowired
-	private final MessageNotificationController messageNotificationController;
+	private final NotificationController notificationController;
 
 	public ApplicationUserDaoService(UserRepository userRepository,
 									 PasswordEncoder passwordEncoder,
 									 UserService userService,
-									 MessageNotificationController messageNotificationController) {
+									 NotificationController notificationController) {
 		super();
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.userService = userService;
-		this.messageNotificationController = messageNotificationController;
+		this.notificationController = notificationController;
 	}
 
 	@Override
@@ -54,13 +55,18 @@ public class ApplicationUserDaoService implements ApplicationUserDao {
 		log.info(String.format("Check if the user with username [%s] exists.", username));
 		if(applicationUser.isPresent()) {
 			log.info("Retrieve the user object");
-			User user = this.userRepository.findById(applicationUser.get().getUsername()).get();
+			User user = userRepository.findById(applicationUser.get().getUsername()).get();
 			log.info("Set the user status to online");
-			this.userService.setUserOnline(user);
+			userService.setUserOnline(user);
 			log.info("Save the user object");
-			this.userRepository.save(user);
-			log.info("Notify all users");
-			messageNotificationController.updateUsersList(user.getUsername(), true);
+			userRepository.save(user);
+			try {
+				log.info("Notify all users");
+				notificationController.updateStatusUsersList(user.getUsername(), true);
+			} catch(UserNameNotFoundException e) {
+				log.info("Unable to notify users, username [%s] not found", username);
+			}
+
 		}
 		
 		return applicationUser;

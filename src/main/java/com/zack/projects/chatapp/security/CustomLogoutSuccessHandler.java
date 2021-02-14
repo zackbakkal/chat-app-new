@@ -1,6 +1,6 @@
 package com.zack.projects.chatapp.security;
 
-import com.zack.projects.chatapp.controller.MessageNotificationController;
+import com.zack.projects.chatapp.controller.NotificationController;
 import com.zack.projects.chatapp.service.UserService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
     private UserService userService;
 
     @Autowired
-    private MessageNotificationController messageNotificationController;
+    private NotificationController notificationController;
 
     @SneakyThrows
     @Override
@@ -40,7 +40,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
         // TODO: Fix update users list. After the user logs out it disappear from the offline users.
         log.info("Notify all users");
-        messageNotificationController.updateUsersList(authentication.getName(), false);
+        notificationController.updateStatusUsersList(authentication.getName(), false);
 
         log.info(String.format("Redirecting to login page"));
         response.sendRedirect("/login");
