@@ -76,6 +76,13 @@
 						</exclude>
 					</excludes>
 				</configuration>
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<configuration>-->
+<!--							<mainClass>com.zack.projects.chatapp.ChatappApplication</mainClass>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
 			</plugin>
 		</plugins>
 	</build>

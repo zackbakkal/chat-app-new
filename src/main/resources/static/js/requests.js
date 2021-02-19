@@ -5,6 +5,9 @@ var tabIndex;
 $(document).ready(function () {
   $("#messages-list").append("<li>ChatApp Messages ...</li>");
   $("#messages-list").addClass("welcome");
+  var preUpdateFirstName;
+  var preUpdateLastName;
+  var preUpdateEmail;
 
   getOnlineUsers();
 
@@ -15,6 +18,33 @@ $(document).ready(function () {
     var text = $("#sentmessage").val();
     if (text !== "" && recipient != null) {
       sendMessage(text, recipient);
+    }
+  });
+
+  $("#edit-profile").click(function (event) {
+    event.preventDefault();
+    preUpdateFirstName = $("#firstName").val();
+    preUpdateLastName = $("#lastName").val();
+    preUpdateEmail = $("#email").val();
+  });
+
+  $("#save-profile-changes").click(function (event) {
+    event.preventDefault();
+
+    var username = $("#username").val();
+    var firstName = $("#firstName").val();
+    var lastName = $("#lastName").val();
+    var email = $("#email").val();
+
+    if (
+      preUpdateFirstName !== firstName ||
+      preUpdateLastName !== lastName ||
+      (preUpdateEmail !== email &&
+        firstName.length > 0 &&
+        lastName.length > 0 &&
+        email.length > 0)
+    ) {
+      updateProfile(username, firstName, lastName, email);
     }
   });
 
@@ -79,7 +109,7 @@ function loadConversation(username) {
       $("#messages").scrollTop($("#messages")[0].scrollHeight);
     },
     error: function (e) {
-      console.log("error");
+      alert("Error loading conversation.");
       $("#messages-list").append(e);
     },
   });
@@ -119,13 +149,31 @@ function logout() {
       getLoginPage();
     },
     error: function (e) {
-      console.log("Error loging out");
+      alert("Error loging out");
+    },
+  });
+}
+
+function updateProfile(username, firstName, lastName, email) {
+  $.ajax({
+    type: "PUT",
+    url: "/users/update/",
+    data: JSON.stringify({
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+    }),
+    contentType: "application/json; charset=utf-8",
+    success: function (response) {},
+    error: function (e) {
+      alert("Error updating profile");
     },
   });
 }
 
 function getLoginPage() {
-  location.href = "http://localhost:9001/login";
+  location.pathname = "/login";
 }
 
 function listUser(user) {
@@ -182,7 +230,7 @@ function getUserAvailability(username) {
       setAvailabilityClass(username, availability);
     },
     error: function () {
-      console.log("Error changing status");
+      alert("Error changing status");
     },
   });
 }

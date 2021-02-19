@@ -78,18 +78,6 @@ body {
   padding: 0;
 }
 
-/* #online-users-title {
-  padding: 2px;
-  margin: 2px;
-  padding-left: 5px;
-}
-
-#offline-users-title {
-  padding: 2px;
-  margin: 2px;
-  padding-left: 5px;
-} */
-
 #online-users-list {
   padding: 2px;
   margin: 2px;
@@ -101,24 +89,6 @@ body {
   margin: 2px;
   padding-left: 5px;
 }
-
-/* #online-user::before {
-  content: "\2022";
-  color: green;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: 1em;
-}
-
-#offline-user::before {
-  content: "\2022";
-  color: red;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: 1em;
-} */
 
 #messages {
   height: 100%;
@@ -333,25 +303,13 @@ body {
   background-color: #d4edda;
 }
 
-/* .available {
-  color: #00d432;
-} */
-
 #status-away {
   background-color: #fff3cd;
 }
 
-/* .away {
-  color: #ffbf00;
-} */
-
 #status-busy {
   background-color: #f8d7da;
 }
-
-/* .busy {
-  color: #ff0019;
-} */
 
 #status-available:hover {
   background-color: #00d432;
@@ -388,4 +346,25 @@ body {
 
 #offline-users .user .fa {
   color: grey !important;
+}
+
+#edit-profile {
+  background-color: transparent !important;
+}
+
+.modal {
+  color: black;
+  background-color: #3e3e3e !important;
+}
+
+.modal i {
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
+.modal-body div {
+  margin-bottom: 10px;
 }

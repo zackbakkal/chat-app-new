@@ -103,4 +103,12 @@ public class UserController {
         return userService.getOfflineUsers();
     }
 
+    @PutMapping("/update")
+    public void updateProfile(
+            @RequestBody ProfileResponseTemplate updatedProfile) throws UserNameNotFoundException {
+
+        userService.updateProfile(updatedProfile);
+
+    }
+
 }

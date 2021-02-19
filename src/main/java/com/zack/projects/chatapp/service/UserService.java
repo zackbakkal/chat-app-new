@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -253,5 +254,19 @@ public class UserService {
 
         return new UserAvailabilityResponseTemplate(user);
 
+    }
+
+    public void updateProfile(ProfileResponseTemplate updatedProfile) throws UserNameNotFoundException {
+
+        System.out.println(updatedProfile);
+        User user = userRepository.findUserByUsername(updatedProfile.getUsername());
+        ProfileResponseTemplate userProfile = getUserProfile(updatedProfile.getUsername());
+
+        if(!userProfile.equals(updatedProfile)) {
+            user.setFirstName(updatedProfile.getFirstName());
+            user.setLastName(updatedProfile.getLastName());
+            user.setEmail(updatedProfile.getEmail());
+            userRepository.save(user);
+        }
     }
 }
