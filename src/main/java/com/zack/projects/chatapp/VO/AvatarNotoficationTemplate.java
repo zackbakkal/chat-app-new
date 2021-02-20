@@ -8,17 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserOnlineStatusResponseTemplate {
+public class AvatarNotoficationTemplate {
 
     private String username;
-    private boolean online;
-    private String availability;
     private boolean hasAvatar;
 
-    public UserOnlineStatusResponseTemplate(User user) {
+    public AvatarNotoficationTemplate(User user) {
         this.username = user.getUsername();
-        this.online = user.isOnline();
-        this.availability = user.getAvailability();
         this.hasAvatar = user.getProfileImageName() != null;
     }
 

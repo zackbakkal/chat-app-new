@@ -25,11 +25,11 @@
         <form class="form-signin" th:object="${user}" method="POST" th:action="@{/register}">
             <h2 class="form-signin-heading">Register with ChatApp</h2>
             <div class="input-group">
-                <label for="firstName" class="sr-only">Username</label> <input type="text" th:field="*{firstName}"
+                <label for="firstName" class="sr-only">First Name</label> <input type="text" th:field="*{firstName}"
                     id="firstName" name="firstName" class="form-control" placeholder="First Name" required autofocus>
             </div>
             <div class="input-group">
-                <label for="lastName" class="sr-only">Username</label> <input type="text" th:field="*{lastName}"
+                <label for="lastName" class="sr-only">Last Name</label> <input type="text" th:field="*{lastName}"
                     id="lastName" name="lastName" class="form-control" placeholder="Last Name" required>
             </div>
             <div class="input-group margin-bottom-sm">

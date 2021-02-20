@@ -44,4 +44,8 @@ public class NotificationController {
         notificationService.notificationReceived(sender, recipient);
     }
 
+    public void updateUserAvatar(String username) throws UserNameNotFoundException {
+        notificationService.updateUserAvatar(username);
+    }
+
 }

@@ -21,13 +21,13 @@ public class ApplicationUser implements UserDetails {
 	private final boolean isCredentialsNonExpired;
 	private final boolean isEnabled;
 	
-	public ApplicationUser(Set<? extends GrantedAuthority> grantedAuthorities, 
-			String password, 
-			String username,
-			boolean isAccountNonExpired, 
-			boolean isAccountNonLocked, 
-			boolean isCredentialsNonExpired,
-			boolean isEnabled) {
+	public ApplicationUser(Set<? extends GrantedAuthority> grantedAuthorities,
+						   String password,
+						   String username,
+						   boolean isAccountNonExpired,
+						   boolean isAccountNonLocked,
+						   boolean isCredentialsNonExpired,
+						   boolean isEnabled) {
 		super();
 		this.grantedAuthorities = grantedAuthorities;
 		this.username = username;

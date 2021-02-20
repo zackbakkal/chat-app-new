@@ -1,5 +1,6 @@
 package com.zack.projects.chatapp.controller;
 
+import com.zack.projects.chatapp.VO.ProfileImageResponseTemplate;
 import com.zack.projects.chatapp.VO.ProfileResponseTemplate;
 import com.zack.projects.chatapp.VO.UserOnlineStatusResponseTemplate;
 import com.zack.projects.chatapp.VO.UserAvailabilityResponseTemplate;
@@ -9,9 +10,12 @@ import com.zack.projects.chatapp.exception.UserNameNotFoundException;
 import com.zack.projects.chatapp.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -101,6 +105,39 @@ public class UserController {
     @GetMapping("/offline")
     public List<UserOnlineStatusResponseTemplate> getOfflineUsers() {
         return userService.getOfflineUsers();
+    }
+
+    @PostMapping(path = "/update/profile/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ProfileImageResponseTemplate updateProfileImage(
+            HttpServletRequest httpServletRequest,
+            @RequestParam MultipartFile file) throws UserNameNotFoundException {
+        log.info("Calling userService to update profile image");
+        return userService.updateProfileImage(httpServletRequest.getRemoteUser(), file);
+    }
+
+    @PutMapping("/update/profile")
+    public void updateProfile(
+            @RequestBody ProfileResponseTemplate updatedProfile) throws UserNameNotFoundException {
+        log.info("Calling userService to update profile");
+        userService.updateProfile(updatedProfile);
+
+    }
+
+    @GetMapping("/download/profile/image")
+    public byte[] getProfileImage(HttpServletRequest httpServletRequest)
+            throws UserNameNotFoundException {
+        log.info("Calling userService to retrieve profile image");
+        return userService.getProfileImage(httpServletRequest.getRemoteUser());
+    }
+
+    @GetMapping("/download/image/{username}")
+    public byte[] getProfileImageByUsername(@PathVariable String username)
+            throws UserNameNotFoundException {
+        log.info("Calling userService to retrieve profile image by username");
+        return userService.getProfileImage(username);
     }
 
 }

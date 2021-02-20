@@ -63,4 +63,9 @@ public class ChatappLoginController {
 
     }
 
+    @GetMapping("logout")
+    public String logout() {
+        return getLoginView();
+    }
+
 }

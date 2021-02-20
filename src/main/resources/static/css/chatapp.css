@@ -43,11 +43,11 @@ body {
 #username {
   padding: 2px;
   font-weight: bold;
-  margin-left: 10px;
   font-size: 1.5em;
   box-sizing: border-box;
   -webkit-box-shadow: 0px 0px 5px 1px #007bff;
   box-shadow: 0px 0px 5px 1px #007bff;
+  text-align: center;
 }
 
 #username:hover {
@@ -78,18 +78,6 @@ body {
   padding: 0;
 }
 
-/* #online-users-title {
-  padding: 2px;
-  margin: 2px;
-  padding-left: 5px;
-}
-
-#offline-users-title {
-  padding: 2px;
-  margin: 2px;
-  padding-left: 5px;
-} */
-
 #online-users-list {
   padding: 2px;
   margin: 2px;
@@ -101,24 +89,6 @@ body {
   margin: 2px;
   padding-left: 5px;
 }
-
-/* #online-user::before {
-  content: "\2022";
-  color: green;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: 1em;
-}
-
-#offline-user::before {
-  content: "\2022";
-  color: red;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: 1em;
-} */
 
 #messages {
   height: 100%;
@@ -333,25 +303,13 @@ body {
   background-color: #d4edda;
 }
 
-/* .available {
-  color: #00d432;
-} */
-
 #status-away {
   background-color: #fff3cd;
 }
 
-/* .away {
-  color: #ffbf00;
-} */
-
 #status-busy {
   background-color: #f8d7da;
 }
-
-/* .busy {
-  color: #ff0019;
-} */
 
 #status-available:hover {
   background-color: #00d432;
@@ -382,10 +340,51 @@ body {
 }
 
 .user .fa {
-  font-size: 0.5em !important;
-  padding-right: 1px;
+  font-size: 0.7em !important;
+  padding: 0 !important ;
+  margin-right: 3px;
 }
 
 #offline-users .user .fa {
   color: grey !important;
+}
+
+#edit-profile {
+  background-color: transparent !important;
+}
+
+.modal {
+  color: black;
+  background-color: #3e3e3e !important;
+}
+
+.modal i {
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
+.modal-body div {
+  margin-bottom: 10px;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+#profile-image {
+  border-bottom: 1px solid #e9ecef;
+}
+
+#profile-image img {
+  margin: 5px;
+}
+
+#save-profile-image {
+  margin-bottom: 10px;
 }

@@ -5,6 +5,9 @@ var tabIndex;
 $(document).ready(function () {
   $("#messages-list").append("<li>ChatApp Messages ...</li>");
   $("#messages-list").addClass("welcome");
+  var preUpdateFirstName;
+  var preUpdateLastName;
+  var preUpdateEmail;
 
   getOnlineUsers();
 
@@ -16,6 +19,71 @@ $(document).ready(function () {
     if (text !== "" && recipient != null) {
       sendMessage(text, recipient);
     }
+  });
+
+  $("#edit-profile").click(function (event) {
+    event.preventDefault();
+    $("#user-profile-image").attr(
+      "src",
+      "http://localhost:9001/users/download/profile/image"
+    );
+    preUpdateFirstName = $("#firstName").val();
+    preUpdateLastName = $("#lastName").val();
+    preUpdateEmail = $("#email").val();
+  });
+
+  $("#save-profile-changes").click(function (event) {
+    event.preventDefault();
+
+    var username = $("#username").val();
+    var firstName = $("#firstName").val();
+    var lastName = $("#lastName").val();
+    var email = $("#email").val();
+
+    if (
+      preUpdateFirstName !== firstName ||
+      preUpdateLastName !== lastName ||
+      (preUpdateEmail !== email &&
+        firstName.length > 0 &&
+        lastName.length > 0 &&
+        email.length > 0)
+    ) {
+      updateProfile(username, firstName, lastName, email);
+    }
+  });
+
+  $("#save-profile-image").click(function (event) {
+    var formData = new FormData();
+    console.log($("#profile-image-file"));
+    var profileImage = $("#profile-image-file")[0].files[0];
+
+    formData.append("file", profileImage);
+    console.log(formData);
+
+    $.ajax({
+      type: "POST",
+      url: "users/update/profile/image",
+      data: formData,
+      cache: false,
+      contentType: false,
+      processData: false,
+      success: function (profileImageResponseTemplate) {
+        console.log(profileImageResponseTemplate);
+        $("#user-profile-image").attr(
+          "src",
+          "http://localhost:9001/users/download/profile/image"
+        );
+
+        var username = profileImageResponseTemplate.username;
+        $("#" + username + "-profile-image").attr(
+          "src",
+          "users/download/image/" + username
+        );
+      },
+      error: function (e) {
+        alert("Error saving profile image. ", e);
+      },
+    });
   });
 
   $("#logout-button").click(function () {
@@ -79,7 +147,7 @@ function loadConversation(username) {
       $("#messages").scrollTop($("#messages")[0].scrollHeight);
     },
     error: function (e) {
-      console.log("error");
+      alert("Error loading conversation.");
       $("#messages-list").append(e);
     },
   });
@@ -119,28 +187,66 @@ function logout() {
       getLoginPage();
     },
     error: function (e) {
-      console.log("Error loging out");
+      alert("Error loging out");
+    },
+  });
+}
+
+function updateProfile(username, firstName, lastName, email) {
+  $.ajax({
+    type: "PUT",
+    url: "/users/update/profile",
+    data: JSON.stringify({
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+    }),
+    contentType: "application/json; charset=utf-8",
+    success: function (response) {},
+    error: function (e) {
+      alert("Error updating profile");
     },
   });
 }
 
 function getLoginPage() {
-  location.href = "http://localhost:9001/login";
+  location.pathname = "/login";
 }
 
 function listUser(user) {
+  console.log("listing: " + user.username);
+
   var status = user.online ? "online" : "offline";
   var availability = user.availability;
   var icon;
+
+  console.log("downloading: users/download/image/" + user.username);
+
+  let userProfileImage =
+    '<img id="' +
+    user.username +
+    '-profile-image" src="users/download/image/' +
+    user.username +
+    '" class="avatar"/>';
+
+  if (!user.hasAvatar) {
+    userProfileImage =
+      '<img id="' +
+      user.username +
+      '-profile-image" src="images/avatar.svg" class="avatar"/>';
+  }
 
   $("#" + status + "-users").append('<div id="' + user.username + '"></div>');
   $("#" + user.username).addClass("user");
 
   if (user.online) {
     icon =
-      availability === "available" || availability === "busy"
+      availability === "available"
         ? '<i class="fa fa-circle fa-xs"></i>'
-        : '<i class="fa fa-circle-o fa-xs"></i>';
+        : availability === "away"
+        ? '<i class="fa fa-circle-o fa-xs"></i>'
+        : '<i class="fa fa-circle-o-notch fa-xs"></i>';
 
     $("#" + user.username).addClass(availability);
   } else {
@@ -148,6 +254,8 @@ function listUser(user) {
     icon = '<i class="fa fa-circle-o-notch fa-xs"></i>';
   }
 
+  console.log(userProfileImage);
+  $("#" + user.username).append(userProfileImage);
   $("#" + user.username).append(icon);
   $("#" + user.username).append(user.username);
   $("#" + user.username).attr("tabIndex", tabIndex++);
@@ -182,7 +290,7 @@ function getUserAvailability(username) {
       setAvailabilityClass(username, availability);
     },
     error: function () {
-      console.log("Error changing status");
+      alert("Error changing status");
     },
   });
 }

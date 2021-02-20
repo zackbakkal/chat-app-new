@@ -29,7 +29,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <!-- <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script> -->
     <script src="/js/requests.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -64,7 +63,143 @@
           <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li class="nav-item">
-                <a href="#" class="nav-link"><i class="fa fa-user fa-fw"></i>Profile</a>
+                <!-- <a href="#" class="nav-link"
+                  ><i class="fa fa-user fa-fw"></i>Profile</a
+                > -->
+                <!-- Button trigger modal -->
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#exampleModalCenter"
+                  id="edit-profile"
+                >
+                  <i class="fa fa-pencil fa-fw"></i>Profile
+                </button>
+
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="exampleModalCenter"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="exampleModalCenterTitle"
+                  aria-hidden="true"
+                >
+                  <div
+                    class="modal-dialog modal-dialog-centered"
+                    role="document"
+                  >
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                          <i class="fa fa-pencil fa-fw"></i> Profile
+                        </h5>
+                        <button
+                          type="button"
+                          class="close close-modal"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" th:object="${user}">
+                        <div id="profile-image">
+                          <img
+                            th:if="${user.profileImageUrl} == null"
+                            src="images/avatar.svg"
+                            alt="Avatar"
+                            class="avatar"
+                          />
+                          <img
+                            th:if="${user.profileImageUrl} != null"
+                            th:alt="@{Profile Image}"
+                            class="avatar"
+                            id="user-profile-image"
+                          />
+                          <input
+                            type="file"
+                            name="profile-image-file"
+                            id="profile-image-file"
+                          /><br />
+                          <button
+                            type="button"
+                            id="save-profile-image"
+                            class="btn btn-primary"
+                          >
+                            Apply
+                          </button>
+                        </div>
+                        <div class="input-group margin-bottom-sm">
+                          <!-- <i class="fa fa-user fa-fw"></i> -->
+                          <input
+                            class="form-control"
+                            id="username"
+                            name="username"
+                            type="text"
+                            th:placeholder="${user.username}"
+                            th:field="*{username}"
+                            disabled
+                          />
+                        </div>
+                        <div class="input-group">
+                          <label for="firstName" class="sr-only"
+                            >First Name</label
+                          >
+                          <input
+                            type="text"
+                            th:field="*{firstName}"
+                            id="firstName"
+                            name="firstName"
+                            class="form-control"
+                            th:placeholder="${user.firstName}"
+                          />
+                        </div>
+                        <div class="input-group">
+                          <label for="lastName" class="sr-only"
+                            >Last Name</label
+                          >
+                          <input
+                            type="text"
+                            th:field="*{lastName}"
+                            id="lastName"
+                            name="lastName"
+                            class="form-control"
+                            th:placeholder="${user.lastName}"
+                          />
+                        </div>
+                        <div class="input-group">
+                          <i class="fa fa-envelope"></i>
+                          <input
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            type="email"
+                            th:field="*{email}"
+                            th:placeholder="${email}"
+                          />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary close-modal"
+                          data-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          id="save-profile-changes"
+                        >
+                          Save changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </li>
               <li class="nav-item dropdown">
                 <a
@@ -74,9 +209,12 @@
                   ><i class="fa fa-pencil fa-fw"></i>Status</a
                 >
                 <div class="dropdown-menu" id="status">
-                  <a href="#" id="status-available" class="dropdown-item">Active</a>
-                  <a href="#" id="status-away" class="dropdown-item ">Away</a>
-                  <a href="#" id="status-busy" class="dropdown-item ">Busy</a>
+                  <a href="#" id="status-available" class="dropdown-item"
+                    >Active</a
+                  >
+                  <a href="#" id="status-away" class="dropdown-item">Away</a>
+                  <a href="#" id="status-busy" class="dropdown-item">Busy</a>
+                </div>
               </li>
             </ul>
             <ul class="nav navbar-nav ml-auto">
@@ -97,7 +235,11 @@
       <div class="flex-container-main">
         <div class="leftpane">
           <div id="search-user-container">
-            <form id="form-search-user" class="form-inline my-2 my-lg-0" autocomplete="off">
+            <form
+              id="form-search-user"
+              class="form-inline my-2 my-lg-0"
+              autocomplete="off"
+            >
               <div class="input-group">
                 <input
                   class="form-control"

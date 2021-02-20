@@ -37,6 +37,6 @@ $(document).ready(function () {
         ? "fa fa-circle-o fa-xs"
         : "fa fa-circle-o-notch fa-xs";
 
-    $("#" + username + " i:first-child").attr("class", newClass);
+    $("#" + username + " i").attr("class", newClass);
   }
 });

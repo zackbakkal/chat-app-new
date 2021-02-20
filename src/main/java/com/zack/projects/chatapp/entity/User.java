@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Entity
@@ -26,9 +27,15 @@ public class User {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
     private String availability;
+    @Getter(AccessLevel.NONE)
+    private String profileImageName;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "conversations", referencedColumnName = "username")
     private List<UserConversation> userConversations = new CopyOnWriteArrayList<>();
+
+    public String getProfileImageName() {
+        return profileImageName;
+    }
 
 }
