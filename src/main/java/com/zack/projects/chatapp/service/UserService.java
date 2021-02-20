@@ -1,8 +1,12 @@
 package com.zack.projects.chatapp.service;
 
+import com.amazonaws.services.xray.model.Http;
+import com.zack.projects.chatapp.VO.ProfileImageResponseTemplate;
 import com.zack.projects.chatapp.VO.ProfileResponseTemplate;
 import com.zack.projects.chatapp.VO.UserOnlineStatusResponseTemplate;
 import com.zack.projects.chatapp.VO.UserAvailabilityResponseTemplate;
+import com.zack.projects.chatapp.amazon.bucket.BucketName;
+import com.zack.projects.chatapp.amazon.filestore.service.ImageStoreService;
 import com.zack.projects.chatapp.controller.NotificationController;
 import com.zack.projects.chatapp.entity.User;
 import com.zack.projects.chatapp.exception.UserNameExistsException;
@@ -12,15 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class UserService {
+
+    private final long MAX_FILE_SIZE = 5000000;
 
     @Autowired
     private UserRepository userRepository;
@@ -30,6 +39,9 @@ public class UserService {
 
     @Autowired
     private NotificationController notificationController;
+
+    @Autowired
+    private ImageStoreService imageStoreService;
 
     public ProfileResponseTemplate saveUser(User user) throws UserNameExistsException {
         log.info(String.format("Checking if username [%s] already exists", user.getUsername()));
@@ -258,10 +270,10 @@ public class UserService {
 
     public void updateProfile(ProfileResponseTemplate updatedProfile) throws UserNameNotFoundException {
 
-        System.out.println(updatedProfile);
         User user = userRepository.findUserByUsername(updatedProfile.getUsername());
         ProfileResponseTemplate userProfile = getUserProfile(updatedProfile.getUsername());
 
+        log.info(String.format("Updating [%s]'s profile", user.getUsername()));
         if(!userProfile.equals(updatedProfile)) {
             user.setFirstName(updatedProfile.getFirstName());
             user.setLastName(updatedProfile.getLastName());
@@ -269,4 +281,44 @@ public class UserService {
             userRepository.save(user);
         }
     }
+
+    public ProfileImageResponseTemplate updateProfileImage(String username, MultipartFile file) throws UserNameNotFoundException {
+
+        log.info("Updating profile image");
+
+        log.info(String.format("Retrieving user [%s]", username));
+        User user = userRepository.findUserByUsername(username);
+
+        log.info(String.format("Checking if uploaded file is not empty"));
+        if(!file.isEmpty() && file.getSize() < MAX_FILE_SIZE) {
+            String profileImageName = imageStoreService.updateImage(user, file);
+            log.info(String.format("Updating user [%s]", username));
+            user.setProfileImageName(profileImageName);
+            log.info(String.format("Saving user"));
+            userRepository.save(user);
+
+            String path = String.format("%s/%s", BucketName.PROFILE_IMAGE.getBucketName(), username);
+
+            String profileImageUrl = ImageStoreService.buildProfileImageUrl(username, profileImageName);
+            log.info(String.format("Profile image uploaded at [%s]", profileImageUrl));
+            ProfileImageResponseTemplate profileImageResponseTemplate =
+                    new ProfileImageResponseTemplate(username, profileImageUrl);
+
+            notificationController.updateUserAvatar(username);
+
+            return profileImageResponseTemplate;
+
+        } else {
+            log.info(String.format("Cannot upload file with size [%s] Bytes", file.getSize()));
+            throw new IllegalStateException(String.format("Cannot upload file with size [%s] Bytes", file.getSize()));
+        }
+    }
+
+    public byte[] getProfileImage(String username) throws UserNameNotFoundException {
+        User user = userRepository.findById(username).get();
+        log.info(String.format("Downloading image for user [%s]", username));
+        return imageStoreService.downloadProfileImage(user);
+
+    }
+
 }

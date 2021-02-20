@@ -63,6 +63,25 @@ $(document).ready(function () {
         ? "fa fa-circle-o fa-xs"
         : "fa fa-circle-o-notch fa-xs";
 
-    $("#" + username + " i:first-child").attr("class", newClass);
+    $("#" + username + " i").attr("class", newClass);
+  });
+
+  eventSource.addEventListener("updateAvatar", function (event) {
+    userAvatar = JSON.parse(event.data);
+
+    var username = userAvatar.username;
+    var hasAvatar = userAvatar.hasAvatar;
+
+    $("#" + username + "-profile-image").attr(
+      "src",
+      "users/download/image/" + username
+    );
+
+    if (!hasAvatar) {
+      userProfileImage =
+        '<img id="' +
+        user.username +
+        '-profile-image" src="images/avatar.svg" class="avatar"/>';
+    }
   });
 });

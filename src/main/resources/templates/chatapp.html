@@ -97,7 +97,7 @@
                         </h5>
                         <button
                           type="button"
-                          class="close"
+                          class="close close-modal"
                           data-dismiss="modal"
                           aria-label="Close"
                         >
@@ -105,8 +105,34 @@
                         </button>
                       </div>
                       <div class="modal-body" th:object="${user}">
+                        <div id="profile-image">
+                          <img
+                            th:if="${user.profileImageUrl} == null"
+                            src="images/avatar.svg"
+                            alt="Avatar"
+                            class="avatar"
+                          />
+                          <img
+                            th:if="${user.profileImageUrl} != null"
+                            th:alt="@{Profile Image}"
+                            class="avatar"
+                            id="user-profile-image"
+                          />
+                          <input
+                            type="file"
+                            name="profile-image-file"
+                            id="profile-image-file"
+                          /><br />
+                          <button
+                            type="button"
+                            id="save-profile-image"
+                            class="btn btn-primary"
+                          >
+                            Apply
+                          </button>
+                        </div>
                         <div class="input-group margin-bottom-sm">
-                          <i class="fa fa-user fa-fw"></i>
+                          <!-- <i class="fa fa-user fa-fw"></i> -->
                           <input
                             class="form-control"
                             id="username"
@@ -158,7 +184,7 @@
                       <div class="modal-footer">
                         <button
                           type="button"
-                          class="btn btn-secondary"
+                          class="btn btn-secondary close-modal"
                           data-dismiss="modal"
                         >
                           Close

@@ -43,11 +43,11 @@ body {
 #username {
   padding: 2px;
   font-weight: bold;
-  margin-left: 10px;
   font-size: 1.5em;
   box-sizing: border-box;
   -webkit-box-shadow: 0px 0px 5px 1px #007bff;
   box-shadow: 0px 0px 5px 1px #007bff;
+  text-align: center;
 }
 
 #username:hover {
@@ -340,8 +340,9 @@ body {
 }
 
 .user .fa {
-  font-size: 0.5em !important;
-  padding-right: 1px;
+  font-size: 0.7em !important;
+  padding: 0 !important ;
+  margin-right: 3px;
 }
 
 #offline-users .user .fa {
@@ -366,5 +367,24 @@ body {
 }
 
 .modal-body div {
+  margin-bottom: 10px;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+#profile-image {
+  border-bottom: 1px solid #e9ecef;
+}
+
+#profile-image img {
+  margin: 5px;
+}
+
+#save-profile-image {
   margin-bottom: 10px;
 }

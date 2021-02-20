@@ -1,9 +1,6 @@
 package com.zack.projects.chatapp.service;
 
-import com.zack.projects.chatapp.VO.MessageResponseTemplate;
-import com.zack.projects.chatapp.VO.MissedMessageResponseTemplate;
-import com.zack.projects.chatapp.VO.UserAvailabilityResponseTemplate;
-import com.zack.projects.chatapp.VO.UserOnlineStatusResponseTemplate;
+import com.zack.projects.chatapp.VO.*;
 import com.zack.projects.chatapp.entity.Message;
 import com.zack.projects.chatapp.entity.SenderRecipient;
 import com.zack.projects.chatapp.entity.User;
@@ -99,7 +96,7 @@ public class NotificationService {
             log.info(String.format("Removing the emitter from the missed emitter's list"));
 
 
-            log.info(String.format("Sending notifications to [%s] from [%s] users", recipient, senderRecipients.size()));
+            log.info(String.format("Sending notifications to [%s] from [%s]", recipient, senderRecipients.size()));
             senderRecipients.forEach(senderRecipient -> {
 
                 MissedMessageResponseTemplate sentMessage = new MissedMessageResponseTemplate(senderRecipient);
@@ -135,6 +132,7 @@ public class NotificationService {
         UserOnlineStatusResponseTemplate userOnlineStatusResponseTemplate =
                 new UserOnlineStatusResponseTemplate(user);
 
+        log.info(String.format("Sending status update notifications to all users from [%s]", username));
         sseEmittersValues
                 .forEach(sseEmitter ->
                 {
@@ -156,6 +154,7 @@ public class NotificationService {
         UserAvailabilityResponseTemplate userAvailabilityResponseTemplate =
                 new UserAvailabilityResponseTemplate(username, availability);
 
+        log.info(String.format("Sending availability update notifications to all users from [%s]", username));
         sseEmittersValues
                 .forEach(sseEmitter ->
                         {
@@ -167,6 +166,30 @@ public class NotificationService {
                                 sseEmitters.remove(sseEmitter);
                             }
                         });
+
+    }
+
+    public void updateUserAvatar(String username) throws UserNameNotFoundException {
+
+        Collection<SseEmitter> sseEmittersValues = sseEmitters.values();
+
+        User user = userService.findUserByUsername(username);
+
+        AvatarNotoficationTemplate avatarNotoficationTemplate =
+                new AvatarNotoficationTemplate(user);
+
+        log.info(String.format("Sending avatar update notifications to all users from [%s]", username));
+        sseEmittersValues
+                .forEach(sseEmitter ->
+                {
+                    try {
+                        sseEmitter
+                                .send(SseEmitter
+                                        .event().name("updateAvatar").data(avatarNotoficationTemplate));
+                    } catch (IOException e) {
+                        sseEmitters.remove(sseEmitter);
+                    }
+                });
 
     }
 }
